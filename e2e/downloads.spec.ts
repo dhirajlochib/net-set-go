@@ -387,7 +387,10 @@ test.describe('the download page', () => {
     try {
       await page.getByRole('tab', { name: 'macOS' }).click()
       const mac = page.getByRole('tabpanel', { name: 'macOS' })
-      await expect(mac.locator('.install-help')).toHaveCount(0)
+      // Not notarized yet: the Mac gets first-launch help too.
+      await mac.locator('summary').click()
+      await expect(mac).toContainText('Open Anyway')
+      await expect(mac).toContainText('xattr -dr com.apple.quarantine')
       await page.getByRole('tab', { name: 'Windows' }).click()
       await page.getByRole('tabpanel', { name: 'Windows' }).locator('summary').click()
       await expect(page.getByRole('tabpanel', { name: 'Windows' })).toContainText('Run anyway')
@@ -443,7 +446,7 @@ test.describe('the download page', () => {
         'href',
         'https://github.com/dhirajlochib/net-set-go/releases'
       )
-      await expect(page.locator('#panel-mac .install-help')).toHaveCount(0)
+      await expect(page.locator('#panel-mac .install-help')).toHaveCount(1)
       for (const os of ['Windows', 'Linux']) {
         await page.getByRole('tab', { name: os }).click()
         const panel = page.getByRole('tabpanel', { name: os })

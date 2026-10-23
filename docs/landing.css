@@ -1,11 +1,4 @@
 @font-face {
-  font-family: 'Archivo';
-  src: url('assets/fonts/Archivo-Variable.woff2') format('woff2');
-  font-weight: 100 900;
-  font-display: swap;
-  font-stretch: 62% 125%;
-}
-@font-face {
   font-family: 'Geist';
   src: url('assets/fonts/Geist-Variable.woff2') format('woff2');
   font-weight: 100 900;
@@ -40,7 +33,7 @@ a {
     background-size 0.25s ease;
 }
 .lnk:hover {
-  color: #f36712;
+  color: #3d8bff;
   background-size: 100% 1px;
 }
 .navlinks a {
@@ -62,8 +55,8 @@ a {
   height: 2px;
   margin: auto;
   border-radius: 999px;
-  background: #f36712;
-  box-shadow: 0 0 12px rgba(243, 103, 18, 0.72);
+  background: #3d8bff;
+  box-shadow: 0 0 12px rgba(61, 139, 255, 0.72);
   content: '';
   opacity: 0;
   transform: scaleX(0.35);
@@ -88,10 +81,10 @@ a {
     color 0.2s;
 }
 .menu-panel .nav-section-link[aria-current='location'] {
-  border-color: rgba(243, 103, 18, 0.2);
-  background: rgba(243, 103, 18, 0.1);
+  border-color: rgba(61, 139, 255, 0.2);
+  background: rgba(61, 139, 255, 0.1);
   color: #fff;
-  box-shadow: inset 3px 0 #f36712;
+  box-shadow: inset 3px 0 #3d8bff;
 }
 .btn-primary {
   transition:
@@ -99,18 +92,18 @@ a {
     transform 0.2s;
 }
 .btn-primary:hover {
-  background: #ff7d2e !important;
+  background: #4c9aff !important;
   transform: translateY(-1px);
 }
 .btn-3d {
   position: relative;
-  text-shadow: 0 1px 1px rgba(80, 25, 0, 0.35);
+  text-shadow: 0 1px 1px rgba(0, 11, 80, 0.35);
   border: 1px solid rgba(255, 255, 255, 0.16);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.28),
     inset 0 -1px 0 rgba(0, 0, 0, 0.18),
     0 1px 2px rgba(0, 0, 0, 0.4),
-    0 10px 30px -12px rgba(243, 103, 18, 0.55);
+    0 10px 30px -12px rgba(61, 139, 255, 0.55);
   transition:
     transform 0.2s ease,
     box-shadow 0.2s ease,
@@ -123,7 +116,7 @@ a {
     inset 0 1px 0 rgba(255, 255, 255, 0.32),
     inset 0 -1px 0 rgba(0, 0, 0, 0.18),
     0 1px 2px rgba(0, 0, 0, 0.4),
-    0 14px 40px -12px rgba(243, 103, 18, 0.7);
+    0 14px 40px -12px rgba(61, 139, 255, 0.7);
 }
 .btn-3d:active {
   transform: translateY(1px);
@@ -186,7 +179,7 @@ a {
   background: rgba(255, 255, 255, 0.03) !important;
 }
 .srow:hover svg:last-child {
-  color: #f36712 !important;
+  color: #3d8bff !important;
 }
 .tile {
   transition:
@@ -194,11 +187,12 @@ a {
     background 0.2s;
 }
 .tile:hover {
-  border-color: rgba(243, 103, 18, 0.45) !important;
-  background: rgba(243, 103, 18, 0.05) !important;
+  border-color: rgba(61, 139, 255, 0.45) !important;
+  background: rgba(61, 139, 255, 0.05) !important;
 }
 .hero-t {
-  background: linear-gradient(180deg, #ffa066 0%, #f36712 70%);
+  display: inline-block;
+  background: linear-gradient(180deg, #ffffff 0%, #ffffff 35%, #a9c8ff 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -213,7 +207,7 @@ a {
   gap: 6px 16px;
   margin: 0;
   padding: 12px 16px;
-  border-bottom: 1px solid rgba(243, 103, 18, 0.28);
+  border-bottom: 1px solid rgba(61, 139, 255, 0.28);
   background: #160c06;
   color: inherit;
   font-size: 15px;
@@ -222,22 +216,21 @@ a {
   transition: background 0.2s;
 }
 .announce:hover {
-  background: #1f1008;
+  background: #080b1f;
 }
 .pill-new {
   padding: 4px 12px;
   border-radius: 999px;
-  background: #f36712;
+  background: #3d8bff;
   color: #1a0a02;
   font:
-    600 12px 'Geist Mono',
+    600 12px 'Geist',
     ui-monospace,
     monospace;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  letter-spacing: 0;
 }
 .announce-cta {
-  color: #ffb98c;
+  color: #a9cfff;
 }
 .announce-cta span {
   display: inline-block;
@@ -264,35 +257,35 @@ a {
 .tg-wide {
   background: radial-gradient(
     ellipse 70% 75% at 50% -10%,
-    rgba(150, 45, 8, 0.55) 0%,
-    rgba(110, 32, 6, 0.32) 40%,
-    rgba(60, 18, 4, 0.12) 65%,
+    rgba(8, 27, 150, 0.55) 0%,
+    rgba(6, 20, 110, 0.32) 40%,
+    rgba(4, 11, 60, 0.12) 65%,
     transparent 85%
   );
 }
 .tg-core {
   background: radial-gradient(
     ellipse 42% 52% at 50% -6%,
-    rgba(255, 150, 90, 0.9) 0%,
-    rgba(243, 103, 18, 0.7) 22%,
-    rgba(200, 70, 15, 0.38) 48%,
-    rgba(140, 40, 8, 0.12) 72%,
+    rgba(90, 156, 255, 0.9) 0%,
+    rgba(61, 139, 255, 0.7) 22%,
+    rgba(15, 89, 200, 0.38) 48%,
+    rgba(8, 26, 140, 0.12) 72%,
     transparent 90%
   );
   filter: blur(8px);
 }
 .tg-sparks {
   background-image:
-    radial-gradient(1.6px 1.6px at 31% 9%, rgba(255, 215, 180, 0.9), transparent),
-    radial-gradient(1.2px 1.2px at 38% 22%, rgba(255, 215, 180, 0.7), transparent),
-    radial-gradient(2px 2px at 44% 6%, rgba(255, 225, 195, 0.8), transparent),
-    radial-gradient(1.2px 1.2px at 52% 15%, rgba(255, 215, 180, 0.6), transparent),
-    radial-gradient(1.6px 1.6px at 58% 4%, rgba(255, 225, 195, 0.85), transparent),
-    radial-gradient(1.2px 1.2px at 63% 19%, rgba(255, 215, 180, 0.6), transparent),
-    radial-gradient(1.8px 1.8px at 67% 10%, rgba(255, 215, 180, 0.75), transparent),
-    radial-gradient(1.2px 1.2px at 35% 30%, rgba(255, 215, 180, 0.5), transparent),
-    radial-gradient(1.4px 1.4px at 60% 27%, rgba(255, 215, 180, 0.55), transparent),
-    radial-gradient(1px 1px at 48% 26%, rgba(255, 215, 180, 0.6), transparent);
+    radial-gradient(1.6px 1.6px at 31% 9%, rgba(200, 222, 255, 0.9), transparent),
+    radial-gradient(1.2px 1.2px at 38% 22%, rgba(200, 222, 255, 0.7), transparent),
+    radial-gradient(2px 2px at 44% 6%, rgba(195, 219, 255, 0.8), transparent),
+    radial-gradient(1.2px 1.2px at 52% 15%, rgba(200, 222, 255, 0.6), transparent),
+    radial-gradient(1.6px 1.6px at 58% 4%, rgba(195, 219, 255, 0.85), transparent),
+    radial-gradient(1.2px 1.2px at 63% 19%, rgba(200, 222, 255, 0.6), transparent),
+    radial-gradient(1.8px 1.8px at 67% 10%, rgba(200, 222, 255, 0.75), transparent),
+    radial-gradient(1.2px 1.2px at 35% 30%, rgba(200, 222, 255, 0.5), transparent),
+    radial-gradient(1.4px 1.4px at 60% 27%, rgba(200, 222, 255, 0.55), transparent),
+    radial-gradient(1px 1px at 48% 26%, rgba(200, 222, 255, 0.6), transparent);
   animation: tgDrift 9s ease-in-out infinite alternate;
 }
 @keyframes tgDrift {
@@ -403,9 +396,9 @@ a {
 .giant {
   background: linear-gradient(
     180deg,
-    #f36712 0%,
-    rgba(243, 103, 18, 0.4) 45%,
-    rgba(243, 103, 18, 0) 92%
+    #3d8bff 0%,
+    rgba(61, 139, 255, 0.4) 45%,
+    rgba(61, 139, 255, 0) 92%
   );
   -webkit-background-clip: text;
   background-clip: text;
@@ -463,7 +456,7 @@ a {
   opacity: 0.18;
 }
 .area-wifi {
-  fill: rgba(243, 103, 18, 0.62);
+  fill: rgba(61, 139, 255, 0.62);
 }
 .area-usb {
   fill: rgba(200, 200, 206, 0.5);
@@ -524,7 +517,7 @@ a {
 
 :root {
   color-scheme: dark;
-  --orange: #f36712;
+  --orange: #3d8bff;
   --text: #ededef;
   --muted: #a1a1a8;
   font-family: 'Geist', sans-serif;
@@ -556,7 +549,7 @@ button:focus-visible,
 input:focus-visible,
 summary:focus-visible,
 [tabindex]:focus-visible {
-  outline: 2px solid #ff8a3d;
+  outline: 2px solid #6cb0ff;
   outline-offset: 5px;
 }
 .skip-link {
@@ -565,7 +558,7 @@ summary:focus-visible,
   left: 8px;
   z-index: 100;
   padding: 12px 18px;
-  background: #f36712;
+  background: #3d8bff;
   border-radius: 12px;
   transform: translateY(-150%);
 }
@@ -604,7 +597,7 @@ summary:focus-visible,
   gap: 12px;
   padding: 18px 34px;
   border-radius: 999px;
-  background: linear-gradient(180deg, #f2711f, #dd5a0c 55%, #c94a06);
+  background: linear-gradient(180deg, #4a96ff, #3c74ec 55%, #5050d8);
   color: white;
   font-weight: 600;
   font-size: 18px;
@@ -616,9 +609,10 @@ summary:focus-visible,
   font-size: 15px;
 }
 #hero-download-info {
+  font-variant-numeric: tabular-nums;
   margin: 0;
   font:
-    13px/1.6 'Geist Mono',
+    13px/1.6 'Geist',
     monospace;
   color: #8c8c94;
   max-width: 580px;
@@ -640,18 +634,18 @@ summary:focus-visible,
   background: #ffffff08;
 }
 #hero-alternates a:hover {
-  border-color: #f36712;
+  border-color: #3d8bff;
 }
 .flow-wifi {
-  stroke: #f36712;
+  stroke: #3d8bff;
 }
 .flow-usb {
   stroke: #c8c8ce;
 }
 .source-wifi,
 .legend-wifi {
-  fill: #f36712;
-  background: #f36712;
+  fill: #3d8bff;
+  background: #3d8bff;
 }
 .source-usb,
 .legend-usb {
@@ -660,21 +654,21 @@ summary:focus-visible,
 }
 #wifi-diagram-speed,
 #wifi-speed {
-  color: #ff8a3d;
+  color: #6cb0ff;
 }
 #usb-diagram-speed,
 #usb-speed {
   color: #ededef;
 }
 #wifi-contribution {
-  background: #f36712 !important;
+  background: #3d8bff !important;
 }
 #usb-contribution {
   background: #c8c8ce !important;
 }
 .wifi-row .n-name > span:first-child {
-  background: #f36712 !important;
-  box-shadow: 0 0 12px rgba(243, 103, 18, 0.65) !important;
+  background: #3d8bff !important;
+  box-shadow: 0 0 12px rgba(61, 139, 255, 0.65) !important;
 }
 .usb-row .n-name > span:first-child {
   background: #c8c8ce !important;
@@ -721,7 +715,7 @@ summary:focus-visible,
 }
 .network-toggle:checked {
   border: 0;
-  background: #f36712;
+  background: #3d8bff;
   color: #0a0a0b;
 }
 .network-toggle:checked::after {
@@ -752,8 +746,8 @@ summary:focus-visible,
     border-color 0.2s;
 }
 #demo-motion:hover {
-  border-color: rgba(243, 103, 18, 0.45);
-  background: rgba(243, 103, 18, 0.08);
+  border-color: rgba(61, 139, 255, 0.45);
+  background: rgba(61, 139, 255, 0.08);
 }
 .demo-caption {
   position: relative;
@@ -831,10 +825,10 @@ summary:focus-visible,
   opacity: 1;
 }
 .faq-item p a {
-  color: #f58a45;
+  color: #5ba2ff;
   font-weight: 500;
   text-decoration-line: underline;
-  text-decoration-color: rgba(245, 138, 69, 0.55);
+  text-decoration-color: rgba(69, 139, 245, 0.55);
   text-decoration-thickness: 1px;
   text-underline-offset: 3px;
   transition:
@@ -842,7 +836,7 @@ summary:focus-visible,
     text-decoration-color 0.2s ease;
 }
 .faq-item p a:hover {
-  color: #ffab72;
+  color: #93c4ff;
   text-decoration-color: currentColor;
 }
 .downloads {
@@ -864,17 +858,12 @@ summary:focus-visible,
   color: #c8c8ce;
 }
 .section-heading h2 {
-  margin: 24px auto 0;
+  margin: 0 auto;
   font:
-    600 clamp(30px, 4.4vw, 60px)/1.06 'Archivo',
+    700 clamp(32px, 4.6vw, 60px)/1.05 'Geist',
     sans-serif;
-  font-stretch: 118%;
-  letter-spacing: -0.015em;
-  text-transform: uppercase;
+  letter-spacing: -0.035em;
   text-wrap: balance;
-}
-.section-heading h2 span {
-  color: #f36712;
 }
 .section-heading p {
   font-size: 14px;
@@ -905,7 +894,7 @@ summary:focus-visible,
   left: 0;
   width: var(--tab-width, 0);
   border-radius: 999px;
-  background: linear-gradient(180deg, #f2711f, #dd5a0c 55%, #c94a06);
+  background: linear-gradient(180deg, #4a96ff, #3c74ec 55%, #5050d8);
   box-shadow: inset 0 1px 0 #ffffff47;
   content: '';
   transform: translateX(var(--tab-left, 6px));
@@ -982,8 +971,8 @@ summary:focus-visible,
 .release-meta a:hover,
 .release-warning a:hover,
 .download-dialog-actions a:hover {
-  color: #ff8a3d;
-  text-decoration-color: #ff8a3d;
+  color: #6cb0ff;
+  text-decoration-color: #6cb0ff;
   text-underline-offset: 6px;
 }
 .architecture-list {
@@ -1028,11 +1017,12 @@ summary:focus-visible,
   font-size: 15px;
 }
 .asset-link:hover {
-  color: #ff8a3d;
+  color: #6cb0ff;
 }
 .asset-link small {
+  font-variant-numeric: tabular-nums;
   font:
-    12px 'Geist Mono',
+    12px 'Geist',
     monospace;
   color: #8c8c94;
 }
@@ -1110,7 +1100,7 @@ summary:focus-visible,
 #install-dialog form button {
   padding: 14px 28px;
   border-radius: 999px;
-  background: linear-gradient(180deg, #f2711f, #c94a06);
+  background: linear-gradient(180deg, #4a96ff, #5050d8);
   color: white;
   font-weight: 600;
 }
@@ -1162,15 +1152,16 @@ summary:focus-visible,
   font-size: 13px;
 }
 .release-version {
+  font-variant-numeric: tabular-nums;
   color: #ededef;
-  font-family: 'Geist Mono', ui-monospace, monospace;
+  font-family: 'Geist', ui-monospace, monospace;
 }
 .detected-badge {
   padding: 3px 10px;
-  border: 1px solid rgba(243, 103, 18, 0.45);
+  border: 1px solid rgba(61, 139, 255, 0.45);
   border-radius: 999px;
-  background: rgba(243, 103, 18, 0.14);
-  color: #ff8a3d;
+  background: rgba(61, 139, 255, 0.14);
+  color: #6cb0ff;
   font-size: 11px;
   font-weight: 600;
 }
@@ -1201,9 +1192,9 @@ summary:focus-visible,
   max-width: 640px;
   margin: 0 auto 20px;
   padding: 14px 20px;
-  border: 1px solid rgba(243, 103, 18, 0.35);
+  border: 1px solid rgba(61, 139, 255, 0.35);
   border-radius: 16px;
-  background: rgba(243, 103, 18, 0.07);
+  background: rgba(61, 139, 255, 0.07);
   color: #e4e4e8;
   font-size: 14px;
   line-height: 1.5;
@@ -1231,13 +1222,13 @@ summary:focus-visible,
   border-top: 0;
 }
 .architecture-card.recommended {
-  background: rgba(243, 103, 18, 0.06);
+  background: rgba(61, 139, 255, 0.06);
 }
 .architecture-card:hover {
   background: rgba(255, 255, 255, 0.025);
 }
 .architecture-card.recommended:hover {
-  background: rgba(243, 103, 18, 0.09);
+  background: rgba(61, 139, 255, 0.09);
 }
 .os-panel:not([hidden]) {
   animation: panelIn 0.24s ease-out both;
@@ -1273,9 +1264,10 @@ summary:focus-visible,
   font-size: 15px;
 }
 .download-size {
+  font-variant-numeric: tabular-nums;
   color: #8c8c94;
   font:
-    12px 'Geist Mono',
+    12px 'Geist',
     ui-monospace,
     monospace;
 }
@@ -1308,7 +1300,7 @@ summary:focus-visible,
   border: 0;
 }
 .download-symbol {
-  color: #ff8a3d;
+  color: #6cb0ff;
   font-size: 17px;
 }
 .install-help {
@@ -1428,17 +1420,18 @@ summary:focus-visible,
   gap: 14px;
 }
 .install-step-number {
+  font-variant-numeric: tabular-nums;
   display: grid;
   flex: none;
   width: 28px;
   height: 28px;
   place-items: center;
-  border: 1px solid rgba(243, 103, 18, 0.4);
+  border: 1px solid rgba(61, 139, 255, 0.4);
   border-radius: 999px;
-  background: rgba(243, 103, 18, 0.14);
-  color: #ff8a3d;
+  background: rgba(61, 139, 255, 0.14);
+  color: #6cb0ff;
   font:
-    13px 'Geist Mono',
+    13px 'Geist',
     ui-monospace,
     monospace;
 }
@@ -1489,15 +1482,15 @@ summary:focus-visible,
     color 0.2s;
 }
 .copy-command:hover {
-  background: rgba(243, 103, 18, 0.08);
-  color: #ff8a3d;
+  background: rgba(61, 139, 255, 0.08);
+  color: #6cb0ff;
 }
 .copy-command:focus-visible {
   outline-offset: -3px;
 }
 .command-status:not(.sr-only) {
   margin: 8px 0 0;
-  color: #ff8a3d;
+  color: #6cb0ff;
   font-size: 13px;
   line-height: 1.5;
 }
@@ -1533,10 +1526,10 @@ summary:focus-visible,
   width: 42px;
   height: 42px;
   place-items: center;
-  border: 1px solid rgba(243, 103, 18, 0.45);
+  border: 1px solid rgba(61, 139, 255, 0.45);
   border-radius: 999px;
-  background: rgba(243, 103, 18, 0.14);
-  color: #ff8a3d;
+  background: rgba(61, 139, 255, 0.14);
+  color: #6cb0ff;
   font-size: 20px;
 }
 #install-dialog h2 {
@@ -1612,7 +1605,7 @@ summary:focus-visible,
 }
 #download-help-reopen span {
   margin-top: 2px;
-  color: #ff8a3d;
+  color: #6cb0ff;
   font-size: 13px;
   text-decoration: underline;
   text-underline-offset: 3px;
@@ -1681,7 +1674,7 @@ summary:focus-visible,
 }
 a:focus-visible {
   border-radius: 4px;
-  outline: 2px solid rgba(243, 103, 18, 0.85);
+  outline: 2px solid rgba(61, 139, 255, 0.85);
   outline-offset: 4px;
 }
 
@@ -1696,7 +1689,7 @@ a:focus-visible {
   }
   .feature-visual:hover {
     z-index: 1;
-    border-color: rgba(243, 103, 18, 0.24) !important;
+    border-color: rgba(61, 139, 255, 0.24) !important;
     box-shadow: inset 0 1px rgba(255, 255, 255, 0.035);
   }
   .feature-visual:hover > div {
@@ -1850,7 +1843,7 @@ a:focus-visible {
   border: 1px solid #ffffff14;
   border-radius: 32px;
   background:
-    radial-gradient(520px 260px at 0 0, rgba(243, 103, 18, 0.12), transparent 70%), #111113;
+    radial-gradient(520px 260px at 0 0, rgba(61, 139, 255, 0.12), transparent 70%), #111113;
   text-align: left;
 }
 .ext-box h3 {
@@ -1860,11 +1853,9 @@ a:focus-visible {
   gap: 8px 16px;
   margin: 0;
   font:
-    600 clamp(24px, 3vw, 36px)/1.1 'Archivo',
+    700 clamp(24px, 3vw, 36px)/1.1 'Geist',
     sans-serif;
-  font-stretch: 118%;
   letter-spacing: -0.01em;
-  text-transform: uppercase;
 }
 .ext-box > p {
   margin: 14px 0 0;
@@ -1928,7 +1919,7 @@ a:focus-visible {
   font-weight: 600;
 }
 .ext-btn-primary {
-  background: linear-gradient(180deg, #f2711f, #dd5a0c 55%, #c94a06);
+  background: linear-gradient(180deg, #4a96ff, #3c74ec 55%, #5050d8);
   color: #fff;
 }
 .ext-soon {
@@ -1936,11 +1927,10 @@ a:focus-visible {
   padding: 0 4px;
   color: #8c8c94;
   font:
-    500 12px 'Geist Mono',
+    500 12px 'Geist',
     ui-monospace,
     monospace;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  letter-spacing: 0;
 }
 @media (max-width: 1008px) {
   .ext-cards {
