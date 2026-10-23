@@ -78,7 +78,7 @@ NetSetGo uses them **together**.
 
 #### 🧭 Browser extension
 
-- Chrome, Edge and Firefox
+- Chrome, Edge and Firefox (build from source for now — `npm run build:extension`)
 - Hands downloads over with your sign-in cookies
 - Send a single link or capture everything
 - Skip small files or excluded sites
