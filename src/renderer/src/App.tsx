@@ -3,7 +3,6 @@ import { DownloadActionsProvider } from './components/DownloadActionsProvider'
 import { NetworkBindingDialog } from './components/NetworkBindingDialog'
 import { NewDownloadDialog } from './components/NewDownloadDialog'
 import { StatusBar } from './components/StatusBar'
-import { TitleBar } from './components/TitleBar'
 import { TooltipProvider } from './components/ui/tooltip'
 import { useDownloadEvents } from './hooks/useDownloadEvents'
 import { useNetworkEvents } from './hooks/useNetworks'
@@ -62,7 +61,6 @@ function App(): React.JSX.Element {
     <TooltipProvider>
       <DownloadActionsProvider>
         <div className="flex h-full flex-col">
-          <TitleBar />
           <div className="min-h-0 flex-1">
             <CurrentScreen />
           </div>

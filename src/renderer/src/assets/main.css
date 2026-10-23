@@ -252,6 +252,16 @@
   }
 }
 
+/* The toolbar is also the title bar: drag the window by its empty space, never by its controls. */
+.app-toolbar {
+  -webkit-app-region: drag;
+}
+
+.app-toolbar :is(button, a, input, select, textarea, label, [role='button'], [role='combobox']),
+.app-toolbar .no-drag {
+  -webkit-app-region: no-drag;
+}
+
 @keyframes netsetgo-dash {
   to {
     stroke-dashoffset: -60;

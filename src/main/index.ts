@@ -60,14 +60,14 @@ app.on('open-file', (event, path) => {
 const launchLink = linkFromArgs(process.argv)
 if (launchLink) offer(launchLink)
 
-/** The Windows/Linux window controls, in the title bar's colors (main.css's --bg-secondary and
- * --text) for the theme in use, at its height. */
+/** The Windows/Linux window controls, in the toolbar's colors (main.css's --bg and --text)
+ * for the theme in use, at its height. */
 function titleBarOverlay(): Electron.TitleBarOverlayOptions {
   const dark = nativeTheme.shouldUseDarkColors
   return {
-    color: dark ? '#262628' : '#f5f5f7',
+    color: dark ? '#1e1e1e' : '#ffffff',
     symbolColor: dark ? '#f5f5f7' : '#1d1d1f',
-    height: 44
+    height: 52
   }
 }
 
@@ -85,13 +85,13 @@ function createWindow(): void {
     // (which briefly exposes the raw window background) doesn't flash white.
     backgroundColor: nativeTheme.shouldUseDarkColors ? '#1e1e1e' : '#ffffff',
     ...(process.platform !== 'darwin' ? { icon } : {}),
-    // One title bar on every OS: the renderer's own strip (see TitleBar.tsx), with the OS's
-    // window controls over it — macOS's traffic lights, or the minimize/maximize/close that
-    // Windows and Linux draw over the strip's right end.
+    // One title bar on every OS: the renderer's toolbar (see Toolbar.tsx), with the OS's window
+    // controls over it — macOS's traffic lights, or the minimize/maximize/close that Windows and
+    // Linux draw over the toolbar's right end.
     titleBarStyle: 'hidden',
     ...(process.platform === 'darwin'
-      ? // Center the 14px native buttons in the renderer’s 32px macOS title bar.
-        { trafficLightPosition: { x: 16, y: 9 } }
+      ? // Center the 14px native buttons in the renderer's 52px toolbar (Toolbar.tsx).
+        { trafficLightPosition: { x: 20, y: 19 } }
       : { titleBarOverlay: titleBarOverlay() }),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),

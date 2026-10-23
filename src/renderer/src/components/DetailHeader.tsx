@@ -1,3 +1,4 @@
+import { Toolbar } from './Toolbar'
 import { ChevronLeft } from 'lucide-react'
 import { useState } from 'react'
 import { useAppStore } from '../store/useAppStore'
@@ -54,7 +55,7 @@ export function DetailHeader({ download }: { download: DownloadItem }): React.JS
   }
 
   return (
-    <div className="flex h-12 shrink-0 items-center gap-2 border-b-[0.5px] border-border px-5">
+    <Toolbar className="gap-2">
       <button
         type="button"
         onClick={() => setView({ name: 'list' })}
@@ -69,6 +70,6 @@ export function DetailHeader({ download }: { download: DownloadItem }): React.JS
         // The last is the main one; Pause is never the main one, it's the way to stop.
         button(id, index === next.length - 1 && id !== 'pause' ? 'default' : 'secondary')
       )}
-    </div>
+    </Toolbar>
   )
 }

@@ -1,3 +1,4 @@
+import { Toolbar } from '../components/Toolbar'
 import type { DownloadState, FinishedDownload } from '@shared/types'
 import { ChevronRight, Plus, X } from 'lucide-react'
 import { cn } from 'cn'
@@ -183,7 +184,7 @@ export function DownloadsScreen(): React.JSX.Element {
   return (
     <div className="flex h-full flex-col bg-background">
       {chosen.length === 0 ? (
-        <div className="flex h-12 shrink-0 items-center gap-3 border-b-[0.5px] border-border px-5">
+        <Toolbar>
           <DownloadFilterMenu
             value={filter}
             counts={counts}
@@ -211,14 +212,9 @@ export function DownloadsScreen(): React.JSX.Element {
             <Plus data-icon="inline-start" />
             New download
           </Button>
-        </div>
+        </Toolbar>
       ) : (
-        <div
-          role="toolbar"
-          aria-label="Selected downloads"
-          aria-busy={busy}
-          className="flex h-12 shrink-0 items-center gap-3 border-b-[0.5px] border-border px-5"
-        >
+        <Toolbar role="toolbar" aria-label="Selected downloads" aria-busy={busy}>
           <Tooltip>
             <TooltipTrigger
               render={
@@ -249,7 +245,7 @@ export function DownloadsScreen(): React.JSX.Element {
             Select all
           </Button>
           <div className="flex-1" />
-          <div className="flex min-w-0 items-center gap-2 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <div className="no-drag flex min-w-0 items-center gap-2 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {toolbarButtons.map(({ id, targets }) => (
               <Button
                 key={id}
@@ -265,7 +261,7 @@ export function DownloadsScreen(): React.JSX.Element {
             <MoreActionsMenu groups={moreActions} disabled={busy} />
           </div>
           <ScheduleIndicator onClick={openSchedule} />
-        </div>
+        </Toolbar>
       )}
 
       <div className="min-h-0 flex-1 overflow-y-auto px-5 pb-5">
@@ -303,9 +299,11 @@ export function DownloadsScreen(): React.JSX.Element {
                   indeterminate={some}
                   onCheckedChange={(on) => toggle(ids, on)}
                 />
-                <h2 className={groupLabelClass}>
+                <h2 className={`flex items-baseline gap-2 ${groupLabelClass}`}>
                   {group.label}
-                  <span className="ml-2 font-normal text-[var(--text-tertiary)]">{group.items.length}</span>
+                  <span className="font-normal text-[var(--text-tertiary)]">
+                    {group.items.length}
+                  </span>
                 </h2>
                 <div className="flex-1" />
                 {group.label === 'Finished' && history.length > 0 && (

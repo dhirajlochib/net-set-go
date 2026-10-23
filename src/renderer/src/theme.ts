@@ -175,4 +175,6 @@ export function resolveNetworkVisual(
 }
 
 /** In px. Drawn inside the window, so popups have to keep clear of it themselves. */
-export const TITLE_BAR_HEIGHT = window.netsetgo.platform === 'darwin' ? 32 : 44
+/** The toolbar at the top of every screen, which is also the window's title bar (Toolbar.tsx).
+ * main/index.ts places the OS window controls to match. */
+export const TOOLBAR_HEIGHT = 52
