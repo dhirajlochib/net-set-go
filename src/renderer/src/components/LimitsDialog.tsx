@@ -64,8 +64,7 @@ const SPEED_UNITS = {
 const sectionClass = 'flex flex-col gap-2.5 border-t-[0.5px] border-border py-3'
 const headingClass = 'font-sans text-[14px] leading-none font-semibold'
 const hintClass = 'text-[12.5px] leading-snug text-[var(--text-secondary)]'
-const navLabelClass =
-  'px-2.5 pt-3 pb-1.5 font-mono text-[10px] tracking-[0.18em] text-muted-foreground uppercase'
+const navLabelClass = 'px-2.5 pt-3 pb-1.5 text-[11.5px] font-semibold text-muted-foreground'
 
 /** A number of `unit`s typed in, as bytes; anything that isn't a positive number is ignored. */
 function NumberInput({
@@ -104,9 +103,9 @@ function NumberInput({
           const converted = Math.round(value * unitBytes)
           if (Number.isSafeInteger(converted) && converted > 0) onChange(converted)
         }}
-        className="w-20 text-right font-mono tabular-nums"
+        className="w-20 text-right tabular-nums"
       />
-      <span className="font-mono text-[12px] text-muted-foreground">{unit}</span>
+      <span className="tabular-nums text-[12px] text-muted-foreground">{unit}</span>
     </span>
   )
 }
@@ -232,7 +231,7 @@ function GeneralPage({
     <>
       <div className="flex flex-col gap-1 pb-3">
         <h3 className="font-sans text-[18px] leading-none font-semibold">All downloads</h3>
-        <div className="font-mono text-[12px] text-muted-foreground">
+        <div className="tabular-nums text-[12px] text-muted-foreground">
           {running === 0 ? 'No active downloads' : `${running} downloading right now`}
         </div>
       </div>
@@ -281,10 +280,7 @@ function GeneralPage({
             >
               <Minus />
             </Button>
-            <output
-              aria-label="Downloads at once"
-              className="w-8 text-center font-mono tabular-nums"
-            >
+            <output aria-label="Downloads at once" className="w-8 text-center tabular-nums">
               {downloadsAtOnce}
             </output>
             <Button
@@ -381,7 +377,7 @@ function NetworkPage({
     <>
       <div className="flex flex-col gap-1 pb-3">
         <h3 className="font-sans text-[18px] leading-none font-semibold">{name}</h3>
-        <div className="font-mono text-[12px] text-muted-foreground">
+        <div className="tabular-nums text-[12px] text-muted-foreground">
           {formatBytes(used)} used by NetSetGo {dataUsageLabel(period)}
         </div>
       </div>
@@ -520,7 +516,7 @@ function UsageBar({
         />
       </div>
       <div
-        className={`font-mono text-[11.5px] whitespace-nowrap ${reached ? 'text-[var(--color-danger)]' : 'text-muted-foreground'}`}
+        className={`tabular-nums text-[11.5px] whitespace-nowrap ${reached ? 'text-[var(--color-danger)]' : 'text-muted-foreground'}`}
       >
         {formatBytes(used)} of {formatBytes(limit)} {dataUsageLabel(period)}
       </div>
@@ -692,7 +688,7 @@ function LimitsEditor({
         {detail.map((line) => (
           <span
             key={line}
-            className={`truncate font-mono text-[11px] ${warn ? 'text-[var(--color-danger)]' : 'text-muted-foreground'}`}
+            className={`truncate tabular-nums text-[11px] ${warn ? 'text-[var(--color-danger)]' : 'text-muted-foreground'}`}
           >
             {line}
           </span>

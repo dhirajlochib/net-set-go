@@ -14,8 +14,7 @@ interface NetworkEditPopoverProps {
   osName: string
 }
 
-const fieldLabelClass =
-  'font-mono text-[9px] leading-none font-medium tracking-[0.12em] text-muted-foreground uppercase'
+const fieldLabelClass = 'text-[11.5px] leading-none font-semibold text-muted-foreground'
 
 const MAX_NETWORK_NAME_LENGTH = 40
 

@@ -66,18 +66,18 @@ function BigStat({
 }): React.JSX.Element {
   return (
     <>
-      <div className="flex items-center gap-1.5 font-mono text-[10px] leading-none font-medium tracking-[0.2em] text-muted-foreground">
+      <div className="flex items-center gap-1.5 text-[11.5px] leading-none font-semibold text-muted-foreground">
         {label}
         {note}
       </div>
       <div className="flex items-baseline gap-[7px]">
         <div
-          className={`font-mono text-[38px] leading-[0.88] font-semibold tracking-[-0.03em] tabular-nums ${valueClass}`}
+          className={`tabular-nums text-[38px] leading-[0.88] font-semibold tracking-[-0.03em] ${valueClass}`}
         >
           {value}
         </div>
         {unit && (
-          <div className="font-mono text-[12px] leading-none font-medium text-muted-foreground">
+          <div className="tabular-nums text-[12px] leading-none font-medium text-muted-foreground">
             {unit}
           </div>
         )}
@@ -155,9 +155,9 @@ export const DownloadingScreen = memo(function DownloadingScreen({
   // The cap over every download, beside the speed it holds down — slow mode named, so a low
   // number explains itself.
   const speedCap = slowMode
-    ? ` · SLOW MODE ${formatSpeedLimit(slowModeSpeed)}`
+    ? ` · slow mode ${formatSpeedLimit(slowModeSpeed)}`
     : speedLimit !== undefined
-      ? ` · LIMIT ${formatSpeedLimit(speedLimit)}`
+      ? ` · limit ${formatSpeedLimit(speedLimit)}`
       : ''
   // Every network is a row, for switching it on or off; the charts draw only those in play.
   const rows = groupByNetwork(download)
@@ -192,7 +192,7 @@ export const DownloadingScreen = memo(function DownloadingScreen({
           .sort((a, b) => a.ratio - b.ratio)
           .map(({ ratio, visual }) => ({
             visual,
-            label: `${ratio.toFixed(1)}× ${visual.name.toUpperCase()} ALONE`,
+            label: `${ratio.toFixed(1)}× ${visual.name} alone`,
             tooltip: bySpeed
               ? `Total speed is ${ratio.toFixed(1)}× faster than ${visual.name} alone`
               : `Total downloaded is ${ratio.toFixed(1)}× compared to ${visual.name} alone`
@@ -203,10 +203,10 @@ export const DownloadingScreen = memo(function DownloadingScreen({
     chipOptions.length > 0 ? chipOptions[chipModeIndex % chipOptions.length] : null
 
   const statusBadge = isPaused
-    ? { label: isQueued ? 'QUEUED' : 'PAUSED', palette: KIND_PALETTE.usb }
+    ? { label: isQueued ? 'Queued' : 'Paused', palette: KIND_PALETTE.usb }
     : null
 
-  const throughputStatusLabel = isPaused ? null : `LAST ${SPEED_HISTORY_SECONDS}S`
+  const throughputStatusLabel = isPaused ? null : `last ${SPEED_HISTORY_SECONDS} s`
 
   return (
     <div className="flex h-full flex-col bg-background">
@@ -234,7 +234,7 @@ export const DownloadingScreen = memo(function DownloadingScreen({
           <div className="flex min-w-[130px] shrink-0 flex-col gap-[7px]">
             <>
               <BigStat
-                label={`TOTAL SPEED${speedCap}`}
+                label={`Total speed${speedCap}`}
                 value={isPaused ? '—' : speedValue}
                 unit={isPaused ? undefined : speedUnit}
                 valueClass={isPaused ? 'text-muted-foreground' : 'text-foreground'}
@@ -261,12 +261,12 @@ export const DownloadingScreen = memo(function DownloadingScreen({
                   )
                 }
               />
-              <div className="flex items-center gap-2 font-mono text-[10px] leading-none font-medium tabular-nums text-muted-foreground">
-                <InlineStat label="AVG" value={formatSpeed(avgSpeedBytesPerSec)} />
+              <div className="flex items-center gap-2 tabular-nums text-[10px] leading-none font-medium text-muted-foreground">
+                <InlineStat label="Avg" value={formatSpeed(avgSpeedBytesPerSec)} />
                 <Dot />
                 {/* A dash until a speed has been held long enough to call it the peak. */}
                 <InlineStat
-                  label="PEAK"
+                  label="Peak"
                   value={
                     peakSpeedBytesPerSec === undefined ? '—' : formatSpeed(peakSpeedBytesPerSec)
                   }
@@ -300,8 +300,8 @@ export const DownloadingScreen = memo(function DownloadingScreen({
               isPaused ? 'opacity-45' : 'opacity-100'
             }`}
           >
-            <div className="font-mono text-[9.5px] leading-none font-medium tracking-[0.12em] text-muted-foreground">
-              THROUGHPUT{throughputStatusLabel ? ` · ${throughputStatusLabel}` : ''}
+            <div className="text-[11.5px] leading-none font-semibold text-muted-foreground">
+              Throughput{throughputStatusLabel ? ` · ${throughputStatusLabel}` : ''}
             </div>
             <ThroughputChart
               order={groups.map((g, i) => ({
@@ -319,7 +319,7 @@ export const DownloadingScreen = memo(function DownloadingScreen({
       {/* File info — always visible, never shrinks */}
       <div className="shrink-0 p-[16px_20px_0px]">
         <div className="flex items-center gap-[14px]">
-          <div className="flex size-11 shrink-0 items-center justify-center rounded-[10px] border-[0.5px] border-[var(--border-strong)] bg-card font-mono text-[10.5px] leading-none font-bold tracking-[0.04em] text-[var(--text-secondary)]">
+          <div className="flex size-11 shrink-0 items-center justify-center rounded-[10px] border-[0.5px] border-[var(--border-strong)] bg-card tabular-nums text-[10.5px] leading-none font-bold tracking-[0.04em] text-[var(--text-secondary)]">
             {isFolder(download) ? (
               <Folder aria-label="Folder" className="size-[18px]" />
             ) : (
@@ -334,7 +334,7 @@ export const DownloadingScreen = memo(function DownloadingScreen({
               />
               {isTorrent && <TorrentBadge />}
             </div>
-            <div className="flex min-w-0 items-center gap-[7px] font-mono text-[12.5px] leading-[1.2] tabular-nums text-[var(--text-secondary)]">
+            <div className="flex min-w-0 items-center gap-[7px] tabular-nums text-[12.5px] leading-[1.2] text-[var(--text-secondary)]">
               <span>
                 {formatBytes(download.bytesDownloaded)}
                 {knownSize ? ` of ${formatBytes(wantedBytes(download))}` : ''}
@@ -363,7 +363,7 @@ export const DownloadingScreen = memo(function DownloadingScreen({
                     size="xs"
                     onClick={() => setFilesOpen((open) => !open)}
                     aria-expanded={filesOpen}
-                    className="h-auto cursor-default rounded-[4px] border-[0.5px] bg-card px-[7px] py-[3px] font-mono text-[10.5px] leading-none font-medium text-[var(--text-secondary)] aria-expanded:bg-secondary dark:bg-card"
+                    className="h-auto cursor-default rounded-[4px] border-[0.5px] bg-card px-[7px] py-[3px] tabular-nums text-[10.5px] leading-none font-medium text-[var(--text-secondary)] aria-expanded:bg-secondary dark:bg-card"
                   >
                     {describeFileCount(download.files.chosen, download.files.total)}{' '}
                     <span aria-hidden className="text-[7.5px] opacity-75">
@@ -389,7 +389,7 @@ export const DownloadingScreen = memo(function DownloadingScreen({
                   // it pushed this text block past the 44px file-type icon beside it and nudged
                   // everything below down. At h-4 the block stays under the icon, so the row
                   // height is the icon's either way.
-                  className="h-4 rounded-[3.5px] px-[7px] py-0.5 text-[9.5px] font-semibold tracking-[0.08em]"
+                  className="h-4 rounded-[5px] px-[7px] py-0.5 text-[10.5px] font-semibold"
                 >
                   {statusBadge.label}
                 </ColorBadge>
@@ -454,7 +454,7 @@ export const DownloadingScreen = memo(function DownloadingScreen({
           >
             <div
               role="row"
-              className="sticky top-0 z-10 col-span-full grid grid-cols-subgrid gap-x-3 border-b border-border bg-background pt-2.5 pb-[7px] font-mono text-[9.5px] leading-none tracking-[0.12em] text-muted-foreground uppercase"
+              className="sticky top-0 z-10 col-span-full grid grid-cols-subgrid gap-x-3 border-b border-border bg-background pt-2.5 pb-[7px] text-[11.5px] leading-none font-semibold text-muted-foreground"
             >
               <div role="columnheader" aria-label="Status" />
               <div role="columnheader">Network</div>
@@ -465,7 +465,7 @@ export const DownloadingScreen = memo(function DownloadingScreen({
                       render={
                         <button
                           type="button"
-                          className="rounded-sm text-inherit uppercase focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                          className="rounded-sm text-inherit focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
                         >
                           Progress
                         </button>

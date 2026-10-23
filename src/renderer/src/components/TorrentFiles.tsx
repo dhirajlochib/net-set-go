@@ -53,7 +53,7 @@ export function TorrentFileList({
       className="max-h-44 overflow-y-auto rounded-[9px] border border-border px-3 py-1.5"
     >
       {folder && (
-        <label className="flex items-center gap-2 py-0.5 font-mono text-[11.5px] font-medium">
+        <label className="flex items-center gap-2 py-0.5 tabular-nums text-[11.5px] font-medium">
           <Checkbox
             checked={skipped.length === 0}
             indeterminate={skipped.length > 0 && skipped.length < files.length}
@@ -69,7 +69,10 @@ export function TorrentFileList({
       {files.map((file, index) => (
         <label
           key={index}
-          className={cn('flex items-center gap-2 py-0.5 font-mono text-[11.5px]', folder && 'pl-6')}
+          className={cn(
+            'flex items-center gap-2 py-0.5 tabular-nums text-[11.5px]',
+            folder && 'pl-6'
+          )}
         >
           <Checkbox
             checked={!skipped.includes(index)}

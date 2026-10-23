@@ -82,8 +82,7 @@ function summaryOf(downloads: DownloadState[]): string {
   return parts.length > 0 ? parts.join(' · ') : 'all done'
 }
 
-const groupLabelClass =
-  'font-mono text-[10.5px] leading-none font-medium tracking-[0.18em] text-muted-foreground uppercase'
+const groupLabelClass = 'text-[12px] leading-none font-semibold text-muted-foreground'
 
 export function DownloadsScreen(): React.JSX.Element {
   const downloadsById = useAppStore((store) => store.downloads)
@@ -195,7 +194,7 @@ export function DownloadsScreen(): React.JSX.Element {
           />
           {/* One group already says it in its header. */}
           {allGroups.length > 1 && (
-            <div className="font-mono text-[11.5px] leading-none text-muted-foreground">
+            <div className="tabular-nums text-[11.5px] leading-none text-muted-foreground">
               {summaryOf(downloads)}
             </div>
           )}
@@ -306,7 +305,7 @@ export function DownloadsScreen(): React.JSX.Element {
                 />
                 <h2 className={groupLabelClass}>
                   {group.label}
-                  <span className="ml-2.5 tracking-normal">{group.items.length}</span>
+                  <span className="ml-2 font-normal text-[var(--text-tertiary)]">{group.items.length}</span>
                 </h2>
                 <div className="flex-1" />
                 {group.label === 'Finished' && history.length > 0 && (
@@ -401,7 +400,7 @@ function EmptyState(): React.JSX.Element {
           <Button type="button" className="mt-1" onClick={() => openNewDownload()}>
             <Plus data-icon="inline-start" />
             New download
-            <span className="ml-1 font-mono text-[11px] opacity-70">{NEW_SHORTCUT}</span>
+            <span className="ml-1 tabular-nums text-[11px] opacity-70">{NEW_SHORTCUT}</span>
           </Button>
         </>
       )}
@@ -565,7 +564,7 @@ const DownloadRow = memo(function DownloadRow({
         onClick={() => onOpen(item.id)}
         className="flex min-w-0 flex-1 items-center gap-3 rounded-md text-left outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
-        <div className="flex size-10 shrink-0 items-center justify-center rounded-lg border-[0.5px] border-border bg-card font-mono text-[10px] font-semibold text-muted-foreground">
+        <div className="flex size-10 shrink-0 items-center justify-center rounded-lg border-[0.5px] border-border bg-card tabular-nums text-[10px] font-semibold text-muted-foreground">
           {badge}
         </div>
         <div className="flex min-w-0 flex-1 flex-col gap-1.5">
@@ -610,7 +609,7 @@ const DownloadRow = memo(function DownloadRow({
                               style={dot.on ? { background: dot.color } : undefined}
                             />
                             <span>{dot.name}</span>
-                            <span className="pl-3 text-right font-mono tabular-nums opacity-80">
+                            <span className="pl-3 text-right tabular-nums opacity-80">
                               {dot.state}
                             </span>
                           </Fragment>
@@ -619,9 +618,7 @@ const DownloadRow = memo(function DownloadRow({
                     </TooltipContent>
                   </Tooltip>
                 )}
-                {speed && (
-                  <span className="font-mono text-[12.5px] font-medium tabular-nums">{speed}</span>
-                )}
+                {speed && <span className="tabular-nums text-[12.5px] font-medium">{speed}</span>}
               </div>
             )}
           </div>
@@ -646,7 +643,9 @@ const DownloadRow = memo(function DownloadRow({
               ))}
             </div>
           )}
-          <div className={`truncate font-mono text-[11.5px] leading-tight ${tone}`}>{detail}</div>
+          <div className={`truncate tabular-nums text-[11.5px] leading-tight ${tone}`}>
+            {detail}
+          </div>
         </div>
       </button>
       {action && (

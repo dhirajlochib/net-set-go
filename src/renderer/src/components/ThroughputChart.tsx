@@ -6,7 +6,7 @@ import { speedTicks } from '../utils/format'
 
 const WIDTH = 560
 const HEIGHT = 130
-const labelClass = 'font-mono text-[9px] leading-none text-muted-foreground tabular-nums'
+const labelClass = 'tabular-nums text-[9px] leading-none text-muted-foreground'
 
 interface ThroughputChartProps {
   order: Array<{ interfaceId: string; solid: string; name: string }>
@@ -157,7 +157,7 @@ export function ThroughputChart({
               {/* Every network at that second, so the pointer needn't land on a fill; on the side
                   away from the edge it would run off. */}
               <div
-                className="pointer-events-none absolute top-0 z-10 flex min-w-[150px] flex-col gap-1 rounded-md border-[0.5px] border-border bg-popover px-2.5 py-2 font-mono text-[11px] tabular-nums shadow-md"
+                className="pointer-events-none absolute top-0 z-10 flex min-w-[150px] flex-col gap-1 rounded-md border-[0.5px] border-border bg-popover px-2.5 py-2 tabular-nums text-[11px] shadow-md"
                 style={
                   hovered > (SPEED_HISTORY_SECONDS - 1) / 2
                     ? { right: `calc(100% - ${slotPercent(hovered)} + 8px)` }

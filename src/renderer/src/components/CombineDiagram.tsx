@@ -164,9 +164,9 @@ export function CombineDiagram({
           y={midY - 11}
           textAnchor="end"
           fill="var(--text-tertiary)"
-          className="font-mono text-[8.5px] tracking-[0.12em] font-medium"
+          className="font-sans text-[10px] font-semibold"
         >
-          COMBINED
+          Combined
         </text>
       )}
     </svg>

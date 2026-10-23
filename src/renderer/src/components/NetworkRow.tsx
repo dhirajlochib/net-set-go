@@ -124,7 +124,7 @@ function HttpStreamRows({
           <div
             role="row"
             key={stream.id}
-            className={`${rowClass} border-[var(--border-subtle)] bg-card py-[6px] font-mono text-[11px] leading-[1.2] ${index === 0 ? 'border-t-[0.5px] pt-[9px]' : ''} ${index === group.streams.length - 1 ? 'border-b-[0.5px] pb-[11px]' : ''}`}
+            className={`${rowClass} border-[var(--border-subtle)] bg-card py-[6px] tabular-nums text-[11px] leading-[1.2] ${index === 0 ? 'border-t-[0.5px] pt-[9px]' : ''} ${index === group.streams.length - 1 ? 'border-b-[0.5px] pb-[11px]' : ''}`}
           >
             <div role="cell" className="flex justify-center pl-5">
               <div
@@ -182,7 +182,7 @@ function HttpStreamRows({
             />
             <div
               role="cell"
-              className="text-right font-mono text-[11px] leading-none font-medium tabular-nums"
+              className="text-right tabular-nums text-[11px] leading-none font-medium"
               style={{
                 color: progress.done ? visual.text : active ? 'var(--text)' : 'var(--text-tertiary)'
               }}
@@ -191,14 +191,14 @@ function HttpStreamRows({
             </div>
             <div
               role="cell"
-              className="text-right font-mono text-[11px] leading-none font-medium whitespace-nowrap tabular-nums"
+              className="text-right tabular-nums text-[11px] leading-none font-medium whitespace-nowrap"
               style={{ color: active ? visual.text : 'var(--text-tertiary)' }}
             >
               {active ? formatSpeed(stream.speedBytesPerSec) : '—'}
             </div>
             <div
               role="cell"
-              className="pr-5 text-right font-mono text-[11px] leading-none whitespace-nowrap text-[var(--text-secondary)] tabular-nums"
+              className="pr-5 text-right tabular-nums text-[11px] leading-none whitespace-nowrap text-[var(--text-secondary)]"
             >
               {formatBytes(stream.bytesDownloaded)}
             </div>
@@ -294,7 +294,7 @@ function PeerRows({
           <div
             role="row"
             key={peer.id}
-            className={`${rowClass} border-[var(--border-subtle)] bg-card py-[6px] font-mono text-[11px] leading-[1.2] ${index === 0 ? 'border-t-[0.5px] pt-[9px]' : ''} ${index === group.peers.length - 1 ? 'border-b-[0.5px] pb-[11px]' : ''}`}
+            className={`${rowClass} border-[var(--border-subtle)] bg-card py-[6px] tabular-nums text-[11px] leading-[1.2] ${index === 0 ? 'border-t-[0.5px] pt-[9px]' : ''} ${index === group.peers.length - 1 ? 'border-b-[0.5px] pb-[11px]' : ''}`}
           >
             <div role="cell" className="flex justify-center pl-5">
               {/* Its state, with its speed: no word needed beside it. */}
@@ -328,14 +328,14 @@ function PeerRows({
             </div>
             <div
               role="cell"
-              className="text-right font-mono text-[11px] leading-none font-medium tabular-nums"
+              className="text-right tabular-nums text-[11px] leading-none font-medium"
               style={{ color: receiving ? 'var(--text)' : 'var(--text-tertiary)' }}
             >
               {shareOf(peer.bytesDownloaded, received)}
             </div>
             <div
               role="cell"
-              className="text-right font-mono text-[11px] leading-[1.35] font-medium whitespace-nowrap tabular-nums"
+              className="text-right tabular-nums text-[11px] leading-[1.35] font-medium whitespace-nowrap"
               style={{ color: receiving ? visual.text : 'var(--text-tertiary)' }}
             >
               <TwoWay
@@ -349,7 +349,7 @@ function PeerRows({
             </div>
             <div
               role="cell"
-              className="pr-5 text-right font-mono text-[11px] leading-[1.35] whitespace-nowrap text-[var(--text-secondary)] tabular-nums"
+              className="pr-5 text-right tabular-nums text-[11px] leading-[1.35] whitespace-nowrap text-[var(--text-secondary)]"
             >
               <TwoWay
                 down={formatBytes(peer.bytesDownloaded)}
@@ -423,7 +423,7 @@ export function NetworkRow({
               size="xs"
               onClick={() => setExpanded((value) => !value)}
               aria-expanded={expanded}
-              className="h-auto cursor-default rounded-[4px] border-[0.5px] bg-card px-[7px] py-[3px] font-mono text-[10.5px] leading-none font-medium text-[var(--text-secondary)] aria-expanded:bg-secondary dark:bg-card"
+              className="h-auto cursor-default rounded-[4px] border-[0.5px] bg-card px-[7px] py-[3px] tabular-nums text-[10.5px] leading-none font-medium text-[var(--text-secondary)] aria-expanded:bg-secondary dark:bg-card"
             >
               {connections.length} {noun}
               {connections.length === 1 ? '' : 's'}{' '}
@@ -438,7 +438,7 @@ export function NetworkRow({
                 render={
                   <span
                     tabIndex={group.error ? 0 : undefined}
-                    className={`rounded-sm font-mono text-[10px] whitespace-nowrap outline-none ${hasError ? 'text-destructive' : 'text-muted-foreground'}`}
+                    className={`rounded-sm tabular-nums text-[10px] whitespace-nowrap outline-none ${hasError ? 'text-destructive' : 'text-muted-foreground'}`}
                   >
                     {networkStatusText(group.status, group.transfer)}
                   </span>
@@ -460,14 +460,14 @@ export function NetworkRow({
         />
         <div
           role="cell"
-          className="text-right font-mono text-[11.5px] leading-none font-medium tabular-nums"
+          className="text-right tabular-nums text-[11.5px] leading-none font-medium"
           style={{ color: sharePercent > 0 ? 'var(--text)' : 'var(--text-tertiary)' }}
         >
           {shareLabel}
         </div>
         <div
           role="cell"
-          className="text-right font-mono text-[11px] leading-[1.35] font-semibold whitespace-nowrap tabular-nums"
+          className="text-right tabular-nums text-[11px] leading-[1.35] font-semibold whitespace-nowrap"
           style={{ color: isActive ? visual.text : 'var(--text-tertiary)' }}
         >
           <TwoWay
@@ -499,7 +499,7 @@ export function NetworkRow({
         </div>
         <div
           role="cell"
-          className="pr-5 text-right font-mono text-[11.5px] leading-[1.35] text-[var(--text-secondary)] tabular-nums"
+          className="pr-5 text-right tabular-nums text-[11.5px] leading-[1.35] text-[var(--text-secondary)]"
         >
           <TwoWay
             down={formatBytes(group.bytesDownloaded)}

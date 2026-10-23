@@ -58,7 +58,7 @@ export function NetworksMenu({
           <>
             {interfaces.length} {interfaces.length === 1 ? 'network' : 'networks'}
             {total > 0 && (
-              <span className="font-mono text-[11.5px] text-muted-foreground">
+              <span className="tabular-nums text-[11.5px] text-muted-foreground">
                 {formatSpeed(total)}
               </span>
             )}
@@ -79,7 +79,7 @@ export function NetworksMenu({
           const reached = dataLimit !== undefined && used >= dataLimit
           const speed = speeds.get(iface.id) ?? 0
           const lineClass =
-            'col-start-2 col-span-2 truncate font-mono text-[11px] text-muted-foreground'
+            'col-start-2 col-span-2 truncate tabular-nums text-[11px] text-muted-foreground'
           return (
             <div
               key={iface.id}
@@ -99,13 +99,13 @@ export function NetworksMenu({
                 </span>
                 {/* The system's own name for the adapter, beside the user's. A long one (a Windows
                     driver name) is cut off, and only then is there a tooltip with all of it. */}
-                <span className="relative z-10 flex max-w-[110px] min-w-0 shrink-0 rounded-[4px] border-[0.5px] border-border bg-foreground/5 px-1.5 font-mono text-[10.5px] text-muted-foreground">
+                <span className="relative z-10 flex max-w-[110px] min-w-0 shrink-0 rounded-[4px] border-[0.5px] border-border bg-foreground/5 px-1.5 tabular-nums text-[10.5px] text-muted-foreground">
                   <TruncatedText text={iface.displayName} />
                 </span>
               </div>
               {/* What it's doing: a used-up network is paused, which says why it carries nothing. */}
               <div
-                className="text-right font-mono text-[12px] font-medium whitespace-nowrap text-muted-foreground"
+                className="text-right tabular-nums text-[12px] font-medium whitespace-nowrap text-muted-foreground"
                 style={
                   reached
                     ? { color: 'var(--color-danger)' }
@@ -136,7 +136,7 @@ export function NetworksMenu({
                   resets are a click away, in the limits the row opens. */}
               {dataLimit !== undefined && (
                 <div
-                  className="col-span-2 col-start-2 flex items-center gap-3 font-mono text-[11px] text-muted-foreground"
+                  className="col-span-2 col-start-2 flex items-center gap-3 tabular-nums text-[11px] text-muted-foreground"
                   style={reached ? { color: 'var(--color-danger)' } : undefined}
                 >
                   <span className="shrink-0">{formatDataUsage(used, dataLimit)}</span>

@@ -14,8 +14,7 @@ import {
 } from '../utils/format'
 import { useFormatSpeed } from '../hooks/useFormatSpeed'
 
-const sectionHeaderClass =
-  'font-mono text-[10px] leading-none tracking-[0.16em] text-muted-foreground uppercase'
+const sectionHeaderClass = 'text-[11.5px] leading-none font-semibold text-muted-foreground'
 
 export function CompleteScreen({
   download
@@ -79,7 +78,7 @@ export function CompleteScreen({
             <div className="truncate font-sans text-[16px] leading-[1.2] font-bold">
               {download.fileName}
             </div>
-            <div className="mt-[5px] truncate font-mono text-[11.5px] leading-[1.3] text-muted-foreground">
+            <div className="mt-[5px] truncate tabular-nums text-[11.5px] leading-[1.3] text-muted-foreground">
               {files && `${describeFileCount(files.chosen, files.total)} · `}
               {formatBytes(finalSize)} ·{' '}
               {missing
@@ -88,14 +87,14 @@ export function CompleteScreen({
             </div>
           </div>
           <div className="flex flex-col items-end gap-[5px]">
-            <div className="font-mono text-[9px] leading-none font-medium tracking-[0.16em] text-muted-foreground">
-              AVERAGE
+            <div className="text-[11.5px] leading-none font-semibold text-muted-foreground">
+              Average
             </div>
             <div className="flex items-baseline gap-1.5">
-              <div className="font-mono text-[26px] leading-[0.9] font-semibold tracking-[-0.02em] tabular-nums text-foreground">
+              <div className="tabular-nums text-[26px] leading-[0.9] font-semibold tracking-[-0.02em] text-foreground">
                 {avgSpeedValue}
               </div>
-              <div className="font-mono text-[11px] leading-none font-medium text-muted-foreground">
+              <div className="tabular-nums text-[11px] leading-none font-medium text-muted-foreground">
                 {avgSpeedUnit}
               </div>
             </div>
@@ -127,12 +126,10 @@ export function CompleteScreen({
               index > 0 ? 'border-l-[0.5px] border-border' : ''
             }`}
           >
-            <div className="font-mono text-[9px] leading-none font-medium tracking-[0.14em] text-muted-foreground uppercase">
+            <div className="text-[11.5px] leading-none font-semibold text-muted-foreground">
               {stat.label}
             </div>
-            <div className="font-mono text-[14px] leading-none font-medium tabular-nums">
-              {stat.value}
-            </div>
+            <div className="tabular-nums text-[14px] leading-none font-medium">{stat.value}</div>
           </div>
         ))}
       </div>
@@ -171,14 +168,14 @@ export function CompleteScreen({
                 {visuals[index].name}
               </div>
               <div className="flex-1" />
-              <div className="font-mono text-[11.5px] leading-none text-[var(--text-secondary)]">
+              <div className="tabular-nums text-[11.5px] leading-none text-[var(--text-secondary)]">
                 {formatBytes(group.bytesDownloaded)} ·{' '}
                 {Math.round((group.bytesDownloaded / totalWeight) * 100)}%
               </div>
             </div>
           ))}
         </div>
-        <div className="mt-auto pt-3 font-mono text-[11px] leading-[1.4] text-muted-foreground">
+        <div className="mt-auto pt-3 tabular-nums text-[11px] leading-[1.4] text-muted-foreground">
           {[
             `written in ${totalChunkCount} ${isTorrent ? 'pieces' : 'chunks'}`,
             // What its peers got from it while it downloaded.

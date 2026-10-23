@@ -47,7 +47,7 @@ function TimeSegment({
       aria-invalid={invalid}
       autoComplete="off"
       value={draft ?? pad(value)}
-      className="w-9 flex-none px-1 text-center font-mono tabular-nums"
+      className="w-9 flex-none px-1 text-center tabular-nums"
       onFocus={(event) => event.currentTarget.select()}
       onBlur={() => setDraft(undefined)}
       onChange={(event) => {

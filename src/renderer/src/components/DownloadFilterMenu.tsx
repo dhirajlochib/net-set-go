@@ -50,7 +50,7 @@ export function DownloadFilterMenu({
                     </Menu.RadioItemIndicator>
                   </span>
                   <span className="flex-1">{filter.label}</span>
-                  <span className="font-mono text-[11.5px] text-muted-foreground tabular-nums">
+                  <span className="tabular-nums text-[11.5px] text-muted-foreground">
                     {counts[filter.value]}
                   </span>
                 </Menu.RadioItem>

@@ -11,7 +11,7 @@ const toggleVariants = cva(
         outline: 'border border-input bg-transparent hover:bg-muted',
         // A selectable preset pill (e.g. "1×"/"2×"/"4×"/"8×" stream-count pickers) — muted/outlined
         // at rest, switches to the primary/accent color once picked.
-        pill: 'border border-border bg-muted font-mono text-[var(--text-secondary)] hover:bg-muted hover:text-[var(--text-secondary)] aria-pressed:border-primary aria-pressed:bg-primary aria-pressed:text-primary-foreground data-[state=on]:border-primary data-[state=on]:bg-primary data-[state=on]:text-primary-foreground'
+        pill: 'border border-border bg-muted tabular-nums text-[var(--text-secondary)] hover:bg-muted hover:text-[var(--text-secondary)] aria-pressed:border-primary aria-pressed:bg-primary aria-pressed:text-primary-foreground data-[state=on]:border-primary data-[state=on]:bg-primary data-[state=on]:text-primary-foreground'
       },
       size: {
         default:

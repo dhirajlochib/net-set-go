@@ -103,7 +103,7 @@ export function ErrorScreen({ download }: { download: DownloadState }): React.JS
 
           {/* File capsule */}
           <div className="flex w-full items-center gap-[11px] rounded-[9px] border-[0.5px] border-border bg-background p-[10px_12px] text-left">
-            <div className="flex size-[34px] shrink-0 items-center justify-center rounded-[7px] border-[0.5px] border-[var(--border-strong)] bg-card font-mono text-[8.5px] leading-none font-semibold text-[var(--text-secondary)]">
+            <div className="flex size-[34px] shrink-0 items-center justify-center rounded-[7px] border-[0.5px] border-[var(--border-strong)] bg-card tabular-nums text-[8.5px] leading-none font-semibold text-[var(--text-secondary)]">
               {isFolder(download) ? (
                 <Folder aria-label="Folder" className="size-[15px]" />
               ) : (
@@ -115,7 +115,7 @@ export function ErrorScreen({ download }: { download: DownloadState }): React.JS
                 text={download.fileName}
                 className="font-sans text-[12.5px] leading-[1.3] font-semibold text-foreground"
               />
-              <div className="mt-0.5 font-mono text-[11px] leading-none tabular-nums text-muted-foreground">
+              <div className="mt-0.5 tabular-nums text-[11px] leading-none text-muted-foreground">
                 {download.bytesDownloaded > 0 ? (
                   <>
                     {formatBytes(download.bytesDownloaded)}
@@ -131,13 +131,13 @@ export function ErrorScreen({ download }: { download: DownloadState }): React.JS
           </div>
 
           <div className="flex w-full min-w-0 items-center gap-2 border-t-[0.5px] border-border pt-3">
-            <div className="min-w-0 flex-1 text-left font-mono text-[11px] leading-none text-muted-foreground">
+            <div className="min-w-0 flex-1 text-left tabular-nums text-[11px] leading-none text-muted-foreground">
               <TruncatedText text={download.url} />
             </div>
             <button
               type="button"
               onClick={handleCopyUrl}
-              className={`min-h-6 shrink-0 border-none bg-transparent px-1 py-0.5 font-mono text-[11px] leading-none ${
+              className={`min-h-6 shrink-0 border-none bg-transparent px-1 py-0.5 tabular-nums text-[11px] leading-none ${
                 copied ? 'text-[var(--color-success)]' : 'text-primary'
               }`}
             >

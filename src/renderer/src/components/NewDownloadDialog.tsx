@@ -363,7 +363,7 @@ function NewDownloadForm({ onDone }: { onDone: () => void }): React.JSX.Element 
             >
               <ChevronLeft />
             </Button>
-            <span className="min-w-12 text-center font-mono text-[11.5px] text-muted-foreground tabular-nums">
+            <span className="min-w-12 text-center tabular-nums text-[11.5px] text-muted-foreground">
               {position + 1} of {links.length}
             </span>
             <Button
@@ -397,7 +397,7 @@ function NewDownloadForm({ onDone }: { onDone: () => void }): React.JSX.Element 
               placeholder="Paste a link: https:// or magnet:"
               spellCheck={false}
               aria-label="Link"
-              className="min-w-0 flex-1 border-none bg-transparent font-mono text-[13px] text-foreground outline-none"
+              className="min-w-0 flex-1 border-none bg-transparent tabular-nums text-[13px] text-foreground outline-none"
             />
             {url && (
               <Tooltip>
@@ -461,7 +461,7 @@ function NewDownloadForm({ onDone }: { onDone: () => void }): React.JSX.Element 
         )}
 
         {probe.status === 'probing' && (
-          <div className="font-mono text-[11.5px] text-muted-foreground">
+          <div className="tabular-nums text-[11.5px] text-muted-foreground">
             {probe.noPeersYet ? 'No peers found yet, still looking…' : 'Checking the link…'}
           </div>
         )}
@@ -474,7 +474,7 @@ function NewDownloadForm({ onDone }: { onDone: () => void }): React.JSX.Element 
 
         {ready && (
           <div className="flex items-center gap-3">
-            <div className="flex size-10 shrink-0 items-center justify-center rounded-lg border-[0.5px] border-border bg-card font-mono text-[10px] font-semibold text-muted-foreground">
+            <div className="flex size-10 shrink-0 items-center justify-center rounded-lg border-[0.5px] border-border bg-card tabular-nums text-[10px] font-semibold text-muted-foreground">
               {torrent && torrent.files.length > 1 ? 'DIR' : fileExtensionBadge(fileName)}
             </div>
             <div className="flex min-w-0 flex-1 flex-col gap-1">
@@ -490,7 +490,7 @@ function NewDownloadForm({ onDone }: { onDone: () => void }): React.JSX.Element 
                   className="min-w-0 rounded-md border border-transparent bg-transparent px-1 -ml-1 text-[14px] font-medium outline-none hover:border-input focus:border-input"
                 />
               )}
-              <div className="font-mono text-[11.5px] text-muted-foreground">
+              <div className="tabular-nums text-[11.5px] text-muted-foreground">
                 {[
                   torrent && describeFileCount(chosenFiles.length, torrent.files.length),
                   sizeToFetch !== null ? formatBytes(sizeToFetch) : 'size unknown',
@@ -518,7 +518,7 @@ function NewDownloadForm({ onDone }: { onDone: () => void }): React.JSX.Element 
 
         <div className="flex items-center gap-3">
           <div className={labelClass}>Save to</div>
-          <div className="min-w-0 flex-1 truncate font-mono text-[12.5px]">
+          <div className="min-w-0 flex-1 truncate tabular-nums text-[12.5px]">
             {toDisplayPath(destinationDir, homeDir)}
           </div>
           <Button type="button" variant="secondary" size="sm" onClick={handleBrowse}>
@@ -605,7 +605,7 @@ function NewDownloadForm({ onDone }: { onDone: () => void }): React.JSX.Element 
                 </ToggleGroupItem>
               ))}
             </ToggleGroup>
-            <div className="font-mono text-[11px] text-muted-foreground">per network</div>
+            <div className="tabular-nums text-[11px] text-muted-foreground">per network</div>
           </div>
         )}
 

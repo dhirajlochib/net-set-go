@@ -36,7 +36,7 @@ function SpeedUnitToggle(): React.JSX.Element {
               <ToggleGroupItem
                 key={unit}
                 value={unit}
-                className="h-full rounded-[4px] px-1.5 font-mono text-[11px] font-medium text-muted-foreground aria-pressed:bg-background aria-pressed:text-foreground"
+                className="h-full rounded-[4px] px-1.5 tabular-nums text-[11px] font-medium text-muted-foreground aria-pressed:bg-background aria-pressed:text-foreground"
               >
                 {unit === 'bytes' ? 'MB/s' : 'Mbps'}
               </ToggleGroupItem>
@@ -89,7 +89,7 @@ export function StatusBar(): React.JSX.Element {
   ].filter(Boolean)
 
   return (
-    <ScreenFooter className="gap-4 font-mono text-[11.5px] text-muted-foreground">
+    <ScreenFooter className="gap-4 tabular-nums text-[11.5px] text-muted-foreground">
       <span className="min-w-0 flex-1 truncate tabular-nums">{status.join(' · ')}</span>
       {message && <span className="truncate">{message}</span>}
       {/* Controls, most-flipped first: the edge holds the set-once view preferences. */}

@@ -65,8 +65,8 @@ if (launchLink) offer(launchLink)
 function titleBarOverlay(): Electron.TitleBarOverlayOptions {
   const dark = nativeTheme.shouldUseDarkColors
   return {
-    color: dark ? '#202325' : '#fafafa',
-    symbolColor: dark ? '#eae7e2' : '#1d1d1f',
+    color: dark ? '#262628' : '#f5f5f7',
+    symbolColor: dark ? '#f5f5f7' : '#1d1d1f',
     height: 44
   }
 }
@@ -83,7 +83,7 @@ function createWindow(): void {
     title: 'NetSetGo',
     // Matches the renderer's dark-mode background so a live window resize
     // (which briefly exposes the raw window background) doesn't flash white.
-    backgroundColor: nativeTheme.shouldUseDarkColors ? '#1c1c1e' : '#ffffff',
+    backgroundColor: nativeTheme.shouldUseDarkColors ? '#1e1e1e' : '#ffffff',
     ...(process.platform !== 'darwin' ? { icon } : {}),
     // One title bar on every OS: the renderer's own strip (see TitleBar.tsx), with the OS's
     // window controls over it — macOS's traffic lights, or the minimize/maximize/close that

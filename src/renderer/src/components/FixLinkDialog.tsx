@@ -75,7 +75,7 @@ export function FixLinkDialog({
             placeholder="https://…"
             value={url}
             onChange={(event) => setUrl(event.target.value)}
-            className="font-mono"
+            className="tabular-nums"
           />
           {error && <div className="text-[12px] text-[var(--color-danger)]">{error}</div>}
           <DialogFooter>
