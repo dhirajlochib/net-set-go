@@ -26,6 +26,12 @@
   --icon-muted-strong: #aeaeb2;
   --scrollbar-thumb: #d1d1d6;
 
+  /* Push buttons, inputs and other controls that sit on a surface, macOS-style. */
+  --control-bg: #ffffff;
+  --control-bg-hover: #f5f5f7;
+  --control-border: rgb(0 0 0 / 0.12);
+  --popover: #ffffff;
+
   --checkbox-shadow: rgba(0, 0, 0, 0.15);
   --checkbox-inset-shadow: rgba(0, 0, 0, 0.04);
 
@@ -111,7 +117,7 @@
   --color-foreground: var(--text);
   --color-card: var(--bg-secondary);
   --color-card-foreground: var(--text);
-  --color-popover: var(--bg-secondary);
+  --color-popover: var(--popover);
   --color-popover-foreground: var(--text);
   --color-primary: var(--color-accent);
   --color-primary-foreground: var(--color-accent-onsolid);
@@ -155,6 +161,11 @@
     --icon-muted: #48484a;
     --icon-muted-strong: #545456;
     --scrollbar-thumb: #545456;
+
+    --control-bg: #3a3a3c;
+    --control-bg-hover: #444446;
+    --control-border: rgb(255 255 255 / 0.08);
+    --popover: #2c2c2e;
 
     --checkbox-shadow: rgba(0, 0, 0, 0.4);
     --checkbox-inset-shadow: rgba(0, 0, 0, 0.3);
