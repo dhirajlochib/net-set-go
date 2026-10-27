@@ -6,6 +6,7 @@ import type {
   DownloadUpdate,
   InitialState,
   MagnetCheckStatus,
+  MenuAction,
   NetworkInterfaceInfo,
   UpdateState
 } from '../shared/types'
@@ -69,6 +70,12 @@ const netsetgoApi = {
     const listener = (): void => callback()
     ipcRenderer.on(IpcChannels.linkReceived, listener)
     return () => ipcRenderer.removeListener(IpcChannels.linkReceived, listener)
+  },
+
+  onMenuAction: (callback: (action: MenuAction) => void): (() => void) => {
+    const listener = (_event: IpcRendererEvent, action: MenuAction): void => callback(action)
+    ipcRenderer.on(IpcChannels.menuAction, listener)
+    return () => ipcRenderer.removeListener(IpcChannels.menuAction, listener)
   },
 
   onDownloadUpdated: (callback: (update: DownloadUpdate) => void): (() => void) => {

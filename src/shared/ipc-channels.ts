@@ -31,6 +31,7 @@ export const IpcChannels = {
   networksChanged: 'network:changed',
   magnetCheckStatus: 'download:magnet-check-status',
   linkReceived: 'app:link-received',
+  menuAction: 'app:menu-action',
   pendingLinks: 'app:pending-links',
   resumeFromLink: 'app:resume-from-link',
   dismissLink: 'app:dismiss-link',

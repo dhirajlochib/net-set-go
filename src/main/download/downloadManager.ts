@@ -349,6 +349,15 @@ async function ensureDiskSpace(destinationDir: string, requiredBytes: number): P
   }
 }
 
+export interface DownloadSummary {
+  id: string
+  fileName: string
+  status: DownloadState['status']
+  totalBytes: number
+  bytesDownloaded: number
+  speedBytesPerSec: number
+}
+
 export class DownloadManager {
   private runtimes = new Map<string, DownloadRuntime>()
   /** Downloads whose new link is being checked: two at once could both pass and both resume. */
@@ -878,6 +887,21 @@ export class DownloadManager {
       await rm(path, { recursive: true, force: true }).catch(() => {})
     }
     await rm(this.downloadDir(id), { recursive: true, force: true }).catch(() => {})
+  }
+
+  /** What each download is doing, oldest first, without its blocks or pieces: cheap enough to ask
+   * every second (the menu bar item does). */
+  summaries(): DownloadSummary[] {
+    return [...this.runtimes.values()]
+      .sort((a, b) => a.state.startedAt - b.state.startedAt)
+      .map(({ state }) => ({
+        id: state.id,
+        fileName: state.fileName,
+        status: state.status,
+        totalBytes: state.totalBytes,
+        bytesDownloaded: state.bytesDownloaded,
+        speedBytesPerSec: state.speedBytesPerSec
+      }))
   }
 
   /** A snapshot of every download: updates with every work unit in them, oldest first. */

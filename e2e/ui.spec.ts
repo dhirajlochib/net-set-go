@@ -392,3 +392,65 @@ test.describe('no networks', () => {
     await expect(netsetgo.page.getByText('No downloads yet')).toBeVisible()
   })
 })
+
+test.describe('menu bar item', () => {
+  type Snapshot = { title: string; items: string[] }
+  const snapshot = (netsetgo: import('./fixtures').NetSetGoApp): Promise<Snapshot> =>
+    netsetgo.evaluateMain(
+      () =>
+        (
+          (globalThis as Record<string, unknown>).__menuBar as { snapshot: () => Snapshot }
+        ).snapshot(),
+      null
+    )
+  const invoke = (netsetgo: import('./fixtures').NetSetGoApp, path: string[]): Promise<void> =>
+    netsetgo.evaluateMain((_electron, labels) => {
+      const bar = (globalThis as Record<string, unknown>).__menuBar as {
+        lastTemplate: Electron.MenuItemConstructorOptions[]
+      }
+      let items = bar.lastTemplate
+      let item: Electron.MenuItemConstructorOptions | undefined
+      for (const label of labels) {
+        item = items.find((candidate) => candidate.label?.startsWith(label))
+        if (!item) throw new Error(`No menu item ${label}`)
+        items = (item.submenu as Electron.MenuItemConstructorOptions[]) ?? []
+      }
+      ;(item!.click as (item: { checked: boolean }) => void)({ checked: !item!.checked })
+    }, path)
+
+  test('shows the speed and each download, and runs what is picked in it @smoke', async ({
+    netsetgo,
+    serve
+  }) => {
+    const origin = await serve({ size: 64 * BLOCK, bytesPerSecond: 256 * 1024 })
+    await netsetgo.start(origin.url(), origin.sha256, { fileName: 'menu.bin' })
+    await expect.poll(async () => (await snapshot(netsetgo)).title).toMatch(/\/s$/)
+    const shown = await snapshot(netsetgo)
+    expect(shown.items[0]).toMatch(/^1 download · /)
+    expect(shown.items.some((label) => label.startsWith('menu.bin  —  '))).toBe(true)
+
+    await invoke(netsetgo, ['menu.bin', 'Pause'])
+    await netsetgo.waitForStatus('paused')
+    await expect.poll(async () => (await snapshot(netsetgo)).items).toContain('  Resume')
+    expect((await snapshot(netsetgo)).title).toBe('')
+    await invoke(netsetgo, ['menu.bin', 'Resume'])
+    await netsetgo.waitForHttpStatus('completed', 60_000)
+    await expect
+      .poll(async () => (await snapshot(netsetgo)).items[0])
+      .toBe('No downloads in progress')
+
+    // The clipboard setting is the same one the footer's button turns on.
+    await invoke(netsetgo, ['Offer links you copy'])
+    await expect(
+      netsetgo.page.getByRole('button', { name: 'Offer links you copy' })
+    ).toHaveAttribute('aria-pressed', 'true')
+    await netsetgo.relaunch()
+    await expect(
+      netsetgo.page.getByRole('button', { name: 'Offer links you copy' })
+    ).toHaveAttribute('aria-pressed', 'true')
+    expect((await snapshot(netsetgo)).items).toContain('Offer links you copy ✓')
+
+    await invoke(netsetgo, ['Data usage…'])
+    await expect(netsetgo.page.getByRole('dialog', { name: 'Data usage' })).toBeVisible()
+  })
+})

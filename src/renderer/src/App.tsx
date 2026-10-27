@@ -1,9 +1,11 @@
+import { useEffect } from 'react'
 import type { DownloadState, FinishedDownload } from '@shared/types'
 import { DownloadActionsProvider } from './components/DownloadActionsProvider'
 import { NetworkBindingDialog } from './components/NetworkBindingDialog'
 import { NewDownloadDialog } from './components/NewDownloadDialog'
 import { StatusBar } from './components/StatusBar'
 import { TooltipProvider } from './components/ui/tooltip'
+import { UsageDialog } from './components/UsageDialog'
 import { useDownloadEvents } from './hooks/useDownloadEvents'
 import { useNetworkEvents } from './hooks/useNetworks'
 import { useNewDownloadShortcuts, useOpenedLinks } from './hooks/useOpenedLinks'
@@ -51,6 +53,15 @@ function CurrentScreen(): React.JSX.Element {
   return shown && !cancelled ? renderDownload(shown) : <DownloadsScreen />
 }
 
+/** Data usage opens from the networks menu and the menu bar item alike, over any screen. */
+function UsageDialogHost(): React.JSX.Element {
+  const open = useAppStore((store) => store.usageOpen)
+  const setOpen = useAppStore((store) => store.setUsageOpen)
+  const receiveMenuAction = useAppStore((store) => store.receiveMenuAction)
+  useEffect(() => window.netsetgo.onMenuAction(receiveMenuAction), [receiveMenuAction])
+  return <UsageDialog open={open} onOpenChange={setOpen} />
+}
+
 function App(): React.JSX.Element {
   useDownloadEvents()
   useOpenedLinks()
@@ -67,6 +78,7 @@ function App(): React.JSX.Element {
           <StatusBar />
           <NewDownloadDialog />
           <NetworkBindingDialog />
+          <UsageDialogHost />
         </div>
       </DownloadActionsProvider>
     </TooltipProvider>

@@ -1,15 +1,24 @@
 import { electronApp, is, optimizer } from '@electron-toolkit/utils'
-import { app, BrowserWindow, Menu, nativeImage, nativeTheme, shell, Tray } from 'electron'
+import { app, BrowserWindow, Menu, nativeTheme, shell } from 'electron'
 import { join } from 'path'
 import icon from '../../resources/icon-dark.png?asset'
+import trayIcon from '../../resources/trayTemplate.png?asset'
 import { registerIpcHandlers } from './ipc/handlers'
 import { keepsRunningForBrowser, startBridge } from './browserBridge'
 import { ClipboardWatcher } from './clipboardWatcher'
+import { MenuBar } from './menuBar'
 import { acceptedLink, bringForward, linkFromArgs, offerLink, queueFoundLink } from './openLinks'
-import { loadSettings, loadThemeSource, migrateLegacyNetworkPreferences } from './settings'
+import {
+  loadSettings,
+  loadThemeSource,
+  migrateLegacyNetworkPreferences,
+  saveSettings
+} from './settings'
 import { startUpdater } from './updater'
 import { testKnobs } from './testKnobs'
 import type { DownloadManager } from './download/downloadManager'
+import { IpcChannels } from '../shared/ipc-channels'
+import type { MenuAction } from '../shared/types'
 
 // In dev mode the app runs as the raw `electron` binary, which otherwise shows "Electron" in
 // the Dock tooltip/menu bar — must be set before the app is ready. Packaged builds already get
@@ -26,7 +35,7 @@ if (!app.requestSingleInstanceLock()) app.exit(0)
 let mainWindow: BrowserWindow | null = null
 let downloadManager: DownloadManager | null = null
 let quitAfterSuspending = false
-let tray: Tray | null = null
+let menuBar: MenuBar | null = null
 
 /** Only once the app is ready. */
 function ensureWindow(): BrowserWindow {
@@ -167,13 +176,39 @@ app.whenReady().then(async () => {
     queue: (link) => queueFoundLink({ url: link, from: 'your clipboard' }, mainWindow),
     show: () => bringForward(ensureWindow())
   })
-  downloadManager = registerIpcHandlers(
-    () => mainWindow,
-    (settings) => void clipboardWatcher.setEnabled(settings.watchClipboard === true)
-  )
-  void loadSettings().then((settings) =>
-    clipboardWatcher.setEnabled(settings.watchClipboard === true)
-  )
+  // What main itself runs off settings, kept as last saved.
+  let settings = await loadSettings()
+  const applySettings = (saved: typeof settings): void => {
+    settings = saved
+    void clipboardWatcher.setEnabled(saved.watchClipboard === true)
+    menuBar?.refresh()
+  }
+  const manager = registerIpcHandlers(() => mainWindow, applySettings)
+  downloadManager = manager
+  applySettings(settings)
+  const sendToWindow = (action: MenuAction): void => {
+    const window = ensureWindow()
+    bringForward(window)
+    window.webContents.send(IpcChannels.menuAction, action)
+  }
+  menuBar = new MenuBar(process.platform === 'darwin' ? trayIcon : icon, {
+    downloads: () => manager.summaries(),
+    speedUnit: () => settings.speedUnit ?? 'bytes',
+    watchClipboard: () => settings.watchClipboard === true,
+    pause: (id) => void manager.pause(id).catch(() => {}),
+    resume: (id) => manager.resume(id),
+    reveal: (id) => void manager.reveal(id),
+    openWindow: () => bringForward(ensureWindow()),
+    newDownload: () => sendToWindow({ type: 'new-download' }),
+    dataUsage: () => sendToWindow({ type: 'data-usage' }),
+    setWatchClipboard: (on) => {
+      applySettings({ ...settings, watchClipboard: on })
+      void saveSettings({ watchClipboard: on })
+      mainWindow?.webContents.send(IpcChannels.menuAction, { type: 'watch-clipboard', on })
+    },
+    quit: () => app.quit()
+  })
+  if (testKnobs.userDataDir) (globalThis as Record<string, unknown>).__menuBar = menuBar
   void startBridge({
     manager: downloadManager,
     offer: (link) => offerLink(link, ensureWindow())
@@ -216,16 +251,6 @@ app.on('before-quit', (event) => {
 app.on('window-all-closed', () => {
   if (process.platform === 'darwin') return
   if (!keepsRunningForBrowser()) return app.quit()
-  // Kept running in the tray, so the browser extension can still reach it.
-  if (tray) return
-  tray = new Tray(nativeImage.createFromPath(icon).resize({ width: 16, height: 16 }))
-  tray.setToolTip('NetSetGo')
-  tray.on('click', () => bringForward(ensureWindow()))
-  tray.setContextMenu(
-    Menu.buildFromTemplate([
-      { label: 'Open NetSetGo', click: () => bringForward(ensureWindow()) },
-      { type: 'separator' },
-      { label: 'Quit NetSetGo', click: () => app.quit() }
-    ])
-  )
+  // Kept running in the menu bar item (see menuBar.ts), so the browser extension can still
+  // reach it.
 })

@@ -9,7 +9,6 @@ import { NetworkEditPopover } from './NetworkEditPopover'
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
 import { Button } from './ui/button'
 import { TruncatedText } from './TruncatedText'
-import { UsageDialog } from './UsageDialog'
 
 /** Every network the computer has, one row each: on the left what it is (its name, the system's
  * name for it, the limits set on it), on the right what it's doing (its speed). Which
@@ -27,7 +26,7 @@ export function NetworksMenu({
   const downloads = useAppStore((store) => store.downloads)
   const networkVisual = useNetworkVisuals()
   const [open, setOpen] = useState(false)
-  const [usageOpen, setUsageOpen] = useState(false)
+  const setUsageOpen = useAppStore((store) => store.setUsageOpen)
   const usage = useNetworkUsage(open)
 
   // Every running download's speed over each network, added up.
@@ -179,7 +178,6 @@ export function NetworksMenu({
           </button>
         </div>
       </PopoverContent>
-      <UsageDialog open={usageOpen} onOpenChange={setUsageOpen} />
     </Popover>
   )
 }

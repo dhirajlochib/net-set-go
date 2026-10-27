@@ -5,6 +5,7 @@ import type {
   DownloadState,
   DownloadUpdate,
   FinishedDownload,
+  MenuAction,
   NetworkInterfaceInfo,
   NetworkPreference,
   NetworkPreferences,
@@ -50,6 +51,7 @@ interface AppStore {
   speedLimit: number | undefined
   slowMode: boolean
   watchClipboard: boolean
+  usageOpen: boolean
   slowModeSpeed: number
   /** Persisted — MB/s or Mbps, for every speed shown. */
   speedUnit: SpeedUnit
@@ -94,6 +96,9 @@ interface AppStore {
   setSpeedLimit: (bytesPerSec: number | undefined) => void
   setSlowMode: (on: boolean) => void
   setWatchClipboard: (on: boolean) => void
+  setUsageOpen: (open: boolean) => void
+  /** From the menu bar item's menu (see main/menuBar.ts). */
+  receiveMenuAction: (action: MenuAction) => void
   setSlowModeSpeed: (bytesPerSec: number) => void
   setSpeedUnit: (unit: SpeedUnit) => void
   setDraftUrl: (url: string) => void
@@ -134,6 +139,7 @@ export const useAppStore = create<AppStore>((set, get) => ({
   speedLimit: initial.speedLimit,
   slowMode: initial.slowMode,
   watchClipboard: initial.watchClipboard,
+  usageOpen: false,
   slowModeSpeed: initial.slowModeSpeed,
   speedUnit: initial.speedUnit,
 
@@ -265,6 +271,14 @@ export const useAppStore = create<AppStore>((set, get) => ({
   setWatchClipboard: (watchClipboard) => {
     set({ watchClipboard })
     persist({ watchClipboard })
+  },
+
+  setUsageOpen: (usageOpen) => set({ usageOpen }),
+
+  receiveMenuAction: (action) => {
+    if (action.type === 'new-download') get().openNewDownload()
+    else if (action.type === 'data-usage') set({ usageOpen: true })
+    else set({ watchClipboard: action.on })
   },
 
   setSlowModeSpeed: (slowModeSpeed) => {

@@ -381,6 +381,13 @@ export interface DailyUsage {
   bytes: Record<string, number>
 }
 
+/** Something picked in the menu bar item's menu that the window carries out. */
+export type MenuAction =
+  | { type: 'new-download' }
+  | { type: 'data-usage' }
+  /** Already saved by main: the window only shows it. */
+  | { type: 'watch-clipboard'; on: boolean }
+
 export interface InitialState {
   downloadSchedule?: DownloadSchedule
   homeDir: string
