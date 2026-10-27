@@ -373,6 +373,12 @@ export const DEFAULT_SLOW_MODE_SPEED = 2 * 1024 ** 2
 
 /** Everything the renderer needs for its first paint, read synchronously by the preload so no
  * saved value flashes in over a default a moment after launch. */
+/** Bytes each network received on one local calendar day ("YYYY-MM-DD"). */
+export interface DailyUsage {
+  day: string
+  bytes: Record<string, number>
+}
+
 export interface InitialState {
   downloadSchedule?: DownloadSchedule
   homeDir: string

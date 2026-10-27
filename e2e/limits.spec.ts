@@ -194,3 +194,63 @@ for (const period of ['day', 'week', 'month'] as const) {
     expect((await netsetgo.api.networkUsage())[id]).toBe(0)
   })
 }
+
+test.describe('data usage history', () => {
+  test('each day keeps what each network received, across a restart @smoke', async ({
+    netsetgo,
+    serve
+  }) => {
+    const origin = await serve({ size: 16 * BLOCK })
+    await netsetgo.start(origin.url(), origin.sha256)
+    await netsetgo.waitForHttpStatus('completed')
+    const today = dataPeriodKey('day', Date.now())
+    const todays = async (): Promise<number> => {
+      const history = await netsetgo.api.usageHistory()
+      return Object.values(history.find((entry) => entry.day === today)?.bytes ?? {}).reduce(
+        (sum, bytes) => sum + bytes,
+        0
+      )
+    }
+    expect(await todays()).toBeGreaterThanOrEqual(16 * BLOCK)
+
+    // Saved on quit, and read back.
+    await netsetgo.relaunch()
+    expect(await todays()).toBeGreaterThanOrEqual(16 * BLOCK)
+
+    // Resetting a network's limit counter leaves the record alone.
+    await netsetgo.api.resetNetworkUsage('a')
+    expect(await todays()).toBeGreaterThanOrEqual(16 * BLOCK)
+
+    const page = netsetgo.page
+    await page
+      .getByRole('button', { name: /networks?/ })
+      .first()
+      .click()
+    await page.getByRole('button', { name: 'Data usage' }).click()
+    const dialog = page.getByRole('dialog', { name: 'Data usage' })
+    await expect(dialog.getByRole('img', { name: /per day/ })).toBeVisible()
+    await expect(
+      dialog.getByRole('list', { name: 'Networks' }).getByRole('listitem')
+    ).not.toHaveCount(0)
+  })
+
+  test('days past the kept window and malformed entries are dropped', async ({
+    netsetgo,
+    dirs
+  }) => {
+    await netsetgo.quit()
+    const now = Date.now()
+    const recent = dataPeriodKey('day', now - 2 * 86400_000)
+    const ancient = dataPeriodKey('day', now - 200 * 86400_000)
+    await writeFile(
+      join(dirs.userData, 'network-usage.json'),
+      JSON.stringify({
+        version: 2,
+        periods: {},
+        history: { [recent]: { a: 5000, b: -1, c: 'x' }, [ancient]: { a: 9 }, nonsense: { a: 1 } }
+      })
+    )
+    await netsetgo.launch()
+    expect(await netsetgo.api.usageHistory()).toEqual([{ day: recent, bytes: { a: 5000 } }])
+  })
+})

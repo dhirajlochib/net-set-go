@@ -38,6 +38,8 @@ function freshUsage(time: number): Record<DataLimitPeriod, Usage> {
 }
 
 const USAGE_SAVE_MS = 10_000
+/** Days of per-network history kept for the usage chart. */
+export const USAGE_HISTORY_DAYS = 90
 
 export class Limits {
   private total: Bucket | null = null
@@ -46,6 +48,9 @@ export class Limits {
   private dataLimits = new Map<string, number>()
   private periods = new Map<string, DataLimitPeriod>()
   private usage = freshUsage(Date.now())
+  /** Bytes per network per local calendar day ("YYYY-MM-DD"), for the usage chart. Unlike the
+   * period counters, resetting a network's usage doesn't touch it: it's a record, not a limit. */
+  private history: Record<string, Record<string, number>> = {}
   private saveTimer: NodeJS.Timeout | null = null
   readonly loaded: Promise<void>
 
@@ -55,6 +60,7 @@ export class Limits {
       .then((saved) => {
         if (!saved || typeof saved !== 'object') return
         const record = saved as Record<string, unknown>
+        this.history = readHistory(record.history, Date.now())
         // Older releases saved only monthly usage. Preserve it without attributing it to a day or week.
         const entries =
           record.version === 2
@@ -116,6 +122,8 @@ export class Limits {
     for (const entry of Object.values(this.usage)) {
       entry.bytes[networkId] = (entry.bytes[networkId] ?? 0) + bytes
     }
+    const day = (this.history[this.usage.day.key] ??= {})
+    day[networkId] = (day[networkId] ?? 0) + bytes
     this.saveTimer ??= setTimeout(() => void this.save(), USAGE_SAVE_MS)
     const limit = this.dataLimits.get(networkId)
     // Told once the caller is done with its bytes: what it does may stop the very connection
@@ -148,6 +156,15 @@ export class Limits {
     )
   }
 
+  /** Bytes per network for each of the last `days` days that had any, oldest first. */
+  dailyHistory(days = USAGE_HISTORY_DAYS): { day: string; bytes: Record<string, number> }[] {
+    const first = dataPeriodKey('day', Date.now() - (days - 1) * DAY_MS)
+    return Object.keys(this.history)
+      .filter((day) => day >= first)
+      .sort()
+      .map((day) => ({ day, bytes: { ...this.history[day] } }))
+  }
+
   /** Reset only the selected network's current period; other periods retain their usage. */
   async resetUsage(networkId: string): Promise<void> {
     await this.loaded
@@ -156,7 +173,7 @@ export class Limits {
     const previous = this.usage[period].bytes[networkId] ?? 0
     this.usage[period].bytes[networkId] = 0
     try {
-      const snapshot = { version: 2, periods: structuredClone(this.usage) }
+      const snapshot = this.snapshot()
       await updateJson(this.usagePath(), () => snapshot)
     } catch (error) {
       this.usage[period].bytes[networkId] += previous
@@ -169,8 +186,17 @@ export class Limits {
     if (this.saveTimer) clearTimeout(this.saveTimer)
     this.saveTimer = null
     this.rollPeriods(Date.now(), false)
-    const usage = { version: 2, periods: structuredClone(this.usage) }
+    const usage = this.snapshot()
     await updateJson(this.usagePath(), () => usage).catch(() => {})
+  }
+
+  private snapshot(): object {
+    this.history = readHistory(this.history, Date.now())
+    return {
+      version: 2,
+      periods: structuredClone(this.usage),
+      history: structuredClone(this.history)
+    }
   }
 
   private rollPeriods(now: number, scheduleSave = true): void {
@@ -185,6 +211,26 @@ export class Limits {
     if (changed && scheduleSave)
       this.saveTimer ??= setTimeout(() => void this.save(), USAGE_SAVE_MS)
   }
+}
+
+const DAY_MS = 24 * 60 * 60 * 1000
+
+/** A saved day → network → bytes record, cleaned of anything malformed and of days past the
+ * kept window. */
+function readHistory(saved: unknown, now: number): Record<string, Record<string, number>> {
+  const history: Record<string, Record<string, number>> = {}
+  if (!saved || typeof saved !== 'object' || Array.isArray(saved)) return history
+  const first = dataPeriodKey('day', now - (USAGE_HISTORY_DAYS - 1) * DAY_MS)
+  for (const [day, networks] of Object.entries(saved)) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(day) || day < first) continue
+    if (!networks || typeof networks !== 'object' || Array.isArray(networks)) continue
+    for (const [id, bytes] of Object.entries(networks)) {
+      if (Number.isSafeInteger(bytes) && (bytes as number) > 0) {
+        ;(history[day] ??= {})[id] = bytes as number
+      }
+    }
+  }
+  return history
 }
 
 /** The bucket for `rate` bytes a second: `current` changed in place, so a debt carries over, or

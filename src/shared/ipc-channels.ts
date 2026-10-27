@@ -15,6 +15,7 @@ export const IpcChannels = {
   listHistory: 'history:list',
   clearHistory: 'history:clear',
   networkUsage: 'network:usage',
+  usageHistory: 'network:usage-history',
   resetNetworkUsage: 'network:reset-usage',
   freeSpace: 'disk:free-space',
   historyChanged: 'history:changed',
