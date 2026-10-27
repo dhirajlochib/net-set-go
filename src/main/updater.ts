@@ -7,6 +7,9 @@ import {
   type MenuItemConstructorOptions
 } from 'electron'
 import { autoUpdater } from 'electron-updater'
+import { execFile } from 'node:child_process'
+import { join } from 'node:path'
+import { promisify } from 'node:util'
 import { IpcChannels } from '../shared/ipc-channels'
 import type { UpdateState } from '../shared/types'
 import { saveSettings } from './settings'
@@ -19,6 +22,26 @@ let state: UpdateState = { status: 'idle', autoUpdate: true }
 let getWindow: () => BrowserWindow | null = () => null
 /** A check asked for from the menu answers even when there's nothing new. */
 let asked = false
+/** Whether this build can install an update itself (see canInstallUpdates). */
+let installs = true
+
+/**
+ * macOS installs an update only over an app signed with a Developer ID, by checking the new
+ * version against the running one's signing identity. An ad-hoc signature's identity is a hash
+ * of that one build, which no other build can match: the download would always be turned away
+ * at install time. Such a build sends the user to the website instead of downloading.
+ */
+async function canInstallUpdates(): Promise<boolean> {
+  if (process.platform !== 'darwin') return true
+  // …/NetSetGo.app/Contents/MacOS/NetSetGo → …/NetSetGo.app
+  const bundle = join(app.getPath('exe'), '..', '..', '..')
+  try {
+    const { stderr } = await promisify(execFile)('codesign', ['-dv', bundle])
+    return /^TeamIdentifier=(?!not set)\S+/m.test(stderr)
+  } catch {
+    return false
+  }
+}
 
 export function updateState(): UpdateState {
   return state
@@ -55,7 +78,7 @@ function download(): void {
 }
 
 function setAutoUpdate(on: boolean): void {
-  autoUpdater.autoDownload = on
+  autoUpdater.autoDownload = on && installs
   set({ autoUpdate: on })
   saveSettings({ autoUpdate: on }).catch((error) =>
     console.error('[netsetgo] failed to save the automatic updates setting', error)
@@ -78,7 +101,7 @@ function menuItems(): MenuItemConstructorOptions[] {
     items.push({ label: `Downloading ${version}…`, enabled: false })
   } else if (status === 'available') {
     items.push({ label: `Download NetSetGo ${version}`, click: download })
-  } else if (status === 'error') {
+  } else if (status === 'error' || status === 'website') {
     items.push({
       label: `Get NetSetGo ${version} from the Website…`,
       click: () => void shell.openExternal(DOWNLOAD_PAGE)
@@ -153,6 +176,7 @@ export function startUpdater(window: () => BrowserWindow | null, autoUpdate: boo
   })
   autoUpdater.on('update-available', ({ version }) => {
     asked = false
+    if (!installs) return set({ status: 'website', version })
     set({ status: autoUpdater.autoDownload ? 'downloading' : 'available', version, percent: 0 })
   })
   autoUpdater.on('download-progress', ({ percent }) => {
@@ -169,6 +193,10 @@ export function startUpdater(window: () => BrowserWindow | null, autoUpdate: boo
   })
 
   setAppMenu()
-  check()
-  setInterval(check, CHECK_EVERY_MS)
+  void canInstallUpdates().then((can) => {
+    installs = can
+    if (!can) autoUpdater.autoDownload = false
+    check()
+    setInterval(check, CHECK_EVERY_MS)
+  })
 }

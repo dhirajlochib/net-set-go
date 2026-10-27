@@ -332,7 +332,9 @@ export type NetworkPreferences = Record<string, NetworkPreference>
 /** Where the app's own update is (see main/updater.ts). `version` is the update's, once one is
  * found; `percent` only means something while downloading. */
 export interface UpdateState {
-  status: 'idle' | 'checking' | 'available' | 'downloading' | 'ready' | 'error'
+  /** website: a newer version is out, but this build can't install it itself (a Mac app without
+   * a Developer ID signature); it's downloaded from the website instead. */
+  status: 'idle' | 'checking' | 'available' | 'downloading' | 'ready' | 'error' | 'website'
   autoUpdate: boolean
   version?: string
   percent?: number

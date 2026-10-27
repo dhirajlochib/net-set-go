@@ -16,6 +16,8 @@ function describe({ status, version, percent, autoUpdate }: UpdateState): string
       return `NetSetGo ${version} is ready — restart to update`
     case 'error':
       return `Couldn’t install NetSetGo ${version}`
+    case 'website':
+      return `NetSetGo ${version} is available on the website`
     default:
       return autoUpdate ? 'NetSetGo updates automatically' : 'Automatic updates are off'
   }
@@ -39,7 +41,7 @@ export function UpdateIndicator(): React.JSX.Element {
       ? `${percent}%`
       : status === 'ready'
         ? 'Restart to update'
-        : status === 'available'
+        : status === 'available' || status === 'website'
           ? 'Update'
           : null
   const busy = status === 'checking' || status === 'downloading'
@@ -55,7 +57,7 @@ export function UpdateIndicator(): React.JSX.Element {
             onClick={() => void window.netsetgo.showUpdateMenu()}
             className={cn(
               'flex h-[26px] min-w-[26px] shrink-0 cursor-default items-center justify-center gap-1.5 rounded-[6px] border-[0.5px] border-border bg-secondary px-[5px] [-webkit-app-region:no-drag]',
-              status === 'available' || status === 'ready'
+              status === 'available' || status === 'ready' || status === 'website'
                 ? 'text-primary'
                 : 'text-[var(--text-secondary)]'
             )}

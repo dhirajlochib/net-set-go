@@ -10,6 +10,16 @@
 
   root.NetSetGoChangelog = [
     {
+      version: 'v1.1.1',
+      items: [
+        {
+          kind: 'fixed',
+          title: 'Updates on a Mac',
+          text: 'macOS can’t install updates into NetSetGo by itself yet, so instead of downloading one it can’t use and asking you to restart again and again, the Update button now takes you straight to the new version on the website.'
+        }
+      ]
+    },
+    {
       version: 'v1.1.0',
       items: [
         {
