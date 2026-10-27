@@ -73,15 +73,24 @@ jobs:
             echo "$APPLE_API_KEY_P8" > "$RUNNER_TEMP/apple-api-key.p8"
             export APPLE_API_KEY="$RUNNER_TEMP/apple-api-key.p8"
           fi
+          # Without a certificate the Mac app is signed ad hoc. Unsigned, the arm64 build keeps the
+          # signature Electron's binary came with, which no longer matches the renamed bundle, and
+          # Apple silicon refuses it as "damaged". Hardened runtime only matters once notarized.
+          unsigned_mac=()
+          if [ "$RUNNER_OS" = macOS ] && [ -z "$signed" ]; then
+            unsigned_mac=(-c.mac.identity=- -c.mac.hardenedRuntime=false)
+          fi
           npm run build
-          npx electron-builder ${{ matrix.target }} --publish never
-          # electron-builder builds unsigned, quietly, when it finds no identity; such a build could
-          # never install an update over a signed one.
-          if [ -n "$signed" ]; then
+          npx electron-builder ${{ matrix.target }} --publish never "${unsigned_mac[@]}"
+          if [ "$RUNNER_OS" = macOS ]; then
             for app in dist/mac/NetSetGo.app dist/mac-arm64/NetSetGo.app; do
               codesign --verify --deep --strict "$app"
-              # -dvv: plain -dv leaves the Authority lines out.
-              codesign -dvv "$app" 2>&1 | grep "^Authority=Developer ID Application" > /dev/null
+              # electron-builder builds unsigned, quietly, when it finds no identity; such a build
+              # could never install an update over a signed one. -dvv: plain -dv leaves the
+              # Authority lines out.
+              if [ -n "$signed" ]; then
+                codesign -dvv "$app" 2>&1 | grep "^Authority=Developer ID Application" > /dev/null
+              fi
             done
           fi
 
