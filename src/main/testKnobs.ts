@@ -35,7 +35,10 @@ export const testKnobs = {
   torrentDht: env['NETSETGO_E2E_DHT'] !== '0',
   /** `NETSETGO_E2E_DHT_BOOTSTRAP=127.0.0.1:9` starts the DHT from these nodes instead of the
    * internet's, so a test can have a DHT that reaches no one. */
-  torrentDhtBootstrap: env['NETSETGO_E2E_DHT_BOOTSTRAP']?.split(',').filter(Boolean)
+  torrentDhtBootstrap: env['NETSETGO_E2E_DHT_BOOTSTRAP']?.split(',').filter(Boolean),
+  /** The yt-dlp to run instead of looking for one ('' for none), so tests never reach real
+   * video sites (see media.ts). */
+  ytDlpPath: env['NETSETGO_E2E_YTDLP']
 }
 
 /** `NETSETGO_E2E_STREAMS=2` fixes how many streams each network runs and turns the automatic

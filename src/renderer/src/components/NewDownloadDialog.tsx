@@ -19,6 +19,7 @@ import { Button } from './ui/button'
 import { Dialog, DialogContent, DialogTitle } from './ui/dialog'
 import { ToggleGroup, ToggleGroupItem } from './ui/toggle-group'
 import { TorrentFileList } from './TorrentFiles'
+import { VideoPageNotice } from './VideoPageNotice'
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip'
 
 type ProbeState =
@@ -473,6 +474,10 @@ function NewDownloadForm({ onDone }: { onDone: () => void }): React.JSX.Element 
             <AlertTriangle className="size-4 shrink-0" />
             {probe.message}
           </div>
+        )}
+
+        {ready?.kind === 'http' && ready.contentType?.startsWith('text/html') && (
+          <VideoPageNotice pageUrl={ready.requestedUrl} />
         )}
 
         {ready && (

@@ -44,6 +44,10 @@ export interface IpcContract {
   usageHistory: { args: []; result: DailyUsage[] }
   /** null when a tunnel through the device opened; otherwise why it didn't. */
   testProxy: { args: [host: string, port: number]; result: string | null }
+  ytDlpAvailable: { args: []; result: boolean }
+  /** Finds the video on a page with yt-dlp and offers its file in New download (as a pending
+   * link). null when it did; otherwise why it didn't. */
+  downloadMedia: { args: [pageUrl: string]; result: string | null }
   resetNetworkUsage: { args: [id: string]; result: void }
   /** Bytes free on the drive holding `dir`; null when it can't be told. */
   freeSpace: { args: [dir: string]; result: number | null }

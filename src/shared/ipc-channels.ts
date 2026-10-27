@@ -17,6 +17,8 @@ export const IpcChannels = {
   networkUsage: 'network:usage',
   usageHistory: 'network:usage-history',
   testProxy: 'network:test-proxy',
+  ytDlpAvailable: 'media:ytdlp-available',
+  downloadMedia: 'media:download',
   resetNetworkUsage: 'network:reset-usage',
   freeSpace: 'disk:free-space',
   historyChanged: 'history:changed',

@@ -26,7 +26,8 @@ import { probeUrl } from '../download/probe'
 import { onMagnetCheckStatus } from '../download/torrent/metadata'
 import { deviceBindingSupported } from '../network/deviceBinding'
 import { testProxy } from '../network/proxy'
-import { pendingLink, pendingLinks, releaseLink } from '../openLinks'
+import { offerLink, pendingLink, pendingLinks, releaseLink } from '../openLinks'
+import { findYtDlp, resolveMedia } from '../media'
 import { NetworkMonitor } from '../network/interfaces'
 import { loadSettings, saveSettings } from '../settings'
 import { showUpdateMenu, updateState } from '../updater'
@@ -172,6 +173,23 @@ export function registerIpcHandlers(
   handle('testProxy', async (_event, host, port) => {
     try {
       await testProxy({ host, port })
+      return null
+    } catch (error) {
+      return error instanceof Error ? error.message : String(error)
+    }
+  })
+
+  handle('ytDlpAvailable', async () => (await findYtDlp()) !== null)
+  handle('downloadMedia', async (_event, pageUrl) => {
+    try {
+      const media = await resolveMedia(pageUrl)
+      const checked = await probeUrl(media.url, media.browser)
+      const probe =
+        checked.kind === 'http' ? { ...checked, suggestedFileName: media.fileName } : checked
+      offerLink(
+        { url: media.url, probe, browser: media.browser, from: `${media.site} via yt-dlp` },
+        getWindow()
+      )
       return null
     } catch (error) {
       return error instanceof Error ? error.message : String(error)
