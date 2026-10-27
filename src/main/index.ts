@@ -4,7 +4,8 @@ import { join } from 'path'
 import icon from '../../resources/icon-dark.png?asset'
 import { registerIpcHandlers } from './ipc/handlers'
 import { keepsRunningForBrowser, startBridge } from './browserBridge'
-import { acceptedLink, bringForward, linkFromArgs, offerLink } from './openLinks'
+import { ClipboardWatcher } from './clipboardWatcher'
+import { acceptedLink, bringForward, linkFromArgs, offerLink, queueFoundLink } from './openLinks'
 import { loadSettings, loadThemeSource, migrateLegacyNetworkPreferences } from './settings'
 import { startUpdater } from './updater'
 import { testKnobs } from './testKnobs'
@@ -161,7 +162,18 @@ app.whenReady().then(async () => {
     optimizer.watchWindowShortcuts(window)
   })
 
-  downloadManager = registerIpcHandlers(() => mainWindow)
+  const clipboardWatcher = new ClipboardWatcher({
+    appFocused: () => BrowserWindow.getFocusedWindow() !== null,
+    queue: (link) => queueFoundLink({ url: link, from: 'your clipboard' }, mainWindow),
+    show: () => bringForward(ensureWindow())
+  })
+  downloadManager = registerIpcHandlers(
+    () => mainWindow,
+    (settings) => void clipboardWatcher.setEnabled(settings.watchClipboard === true)
+  )
+  void loadSettings().then((settings) =>
+    clipboardWatcher.setEnabled(settings.watchClipboard === true)
+  )
   void startBridge({
     manager: downloadManager,
     offer: (link) => offerLink(link, ensureWindow())

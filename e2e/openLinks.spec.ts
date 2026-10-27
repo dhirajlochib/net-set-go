@@ -1,6 +1,7 @@
 import type { Locator } from '@playwright/test'
 import { spawn } from 'node:child_process'
 import { createRequire } from 'node:module'
+import { downloadableLink } from '../src/shared/clipboardLinks'
 import { electronArgs, expect, PROJECT_ROOT, test, type NetSetGoApp } from './fixtures'
 import { seededBytes } from './origin'
 import { named, Swarm, torrentFileOnDisk } from './torrentSwarm'
@@ -89,5 +90,63 @@ test.describe('links handed over by the OS', () => {
     const path = await aTorrentFile()
     await emit('open-file', path)
     await expect(linkField(netsetgo)).toHaveValue(path)
+  })
+})
+
+test.describe('links copied to the clipboard', () => {
+  test('which copied text counts as a download link', () => {
+    expect(downloadableLink('https://example.com/files/ubuntu-24.04.iso')).toBe(
+      'https://example.com/files/ubuntu-24.04.iso'
+    )
+    expect(downloadableLink('  magnet:?xt=urn:btih:abc&dn=x  ')).toBe(
+      'magnet:?xt=urn:btih:abc&dn=x'
+    )
+    expect(downloadableLink('https://example.com/My%20Movie.MKV?token=1')).not.toBeNull()
+    // A page, not a file; not a link; a link inside other text; another scheme.
+    expect(downloadableLink('https://example.com/docs/getting-started')).toBeNull()
+    expect(downloadableLink('hello world')).toBeNull()
+    expect(downloadableLink('see https://example.com/a.zip')).toBeNull()
+    expect(downloadableLink('ftp://example.com/a.zip')).toBeNull()
+  })
+
+  test('a copied file link is offered once turned on, and only then @smoke', async ({
+    netsetgo
+  }) => {
+    // The system clipboard is shared by every test running at once: this app reads a stand-in.
+    await netsetgo.evaluateMain(({ clipboard }) => {
+      const state = globalThis as Record<string, unknown>
+      state.__clipboard = ''
+      clipboard.readText = (async () => state.__clipboard) as typeof clipboard.readText
+    }, null)
+    const copy = (text: string): Promise<void> =>
+      netsetgo.evaluateMain((_electron, value) => {
+        ;(globalThis as Record<string, unknown>).__clipboard = value
+      }, text)
+    const offered = async (): Promise<string[]> =>
+      (await netsetgo.api.pendingLinks()).map((link) => link.url)
+
+    await copy('https://example.com/before.zip')
+    await netsetgo.api.updateSettings({ watchClipboard: true })
+    await netsetgo.page.waitForTimeout(1500)
+    // What was already copied when it was turned on isn't offered.
+    expect(await offered()).toEqual([])
+
+    await copy('https://example.com/pages/about')
+    await netsetgo.page.waitForTimeout(1500)
+    expect(await offered()).toEqual([])
+
+    await copy('https://example.com/files/big.iso')
+    await expect.poll(offered).toEqual(['https://example.com/files/big.iso'])
+    expect((await netsetgo.api.pendingLinks())[0].from).toBe('your clipboard')
+    await expect(netsetgo.page.getByText('From your clipboard')).toBeVisible()
+
+    // A newer copy replaces it rather than piling up.
+    await copy('https://example.com/files/newer.dmg')
+    await expect.poll(offered).toEqual(['https://example.com/files/newer.dmg'])
+
+    await netsetgo.api.updateSettings({ watchClipboard: false })
+    await copy('https://example.com/files/after.zip')
+    await netsetgo.page.waitForTimeout(1500)
+    expect(await offered()).toEqual(['https://example.com/files/newer.dmg'])
   })
 })

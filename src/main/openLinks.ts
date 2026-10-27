@@ -61,6 +61,18 @@ export function offerLink(offer: Offer, window: BrowserWindow | null): void {
   window.webContents.send(IpcChannels.linkReceived)
 }
 
+/** The link NetSetGo last found on its own (copied to the clipboard), replaced by the next. */
+let foundLinkId: string | null = null
+
+/** Queues a link NetSetGo found itself for New download, without taking focus from what the user
+ * is doing: the window shows it when they come to it. Only the newest one found is kept. */
+export function queueFoundLink(offer: Offer, window: BrowserWindow | null): void {
+  if (foundLinkId) links.delete(foundLinkId)
+  foundLinkId = randomUUID()
+  links.set(foundLinkId, offer)
+  if (window && !window.isDestroyed()) window.webContents.send(IpcChannels.linkReceived)
+}
+
 /** Oldest first. */
 export function pendingLinks(): PendingLink[] {
   return [...links].map(([id, offer]) => {

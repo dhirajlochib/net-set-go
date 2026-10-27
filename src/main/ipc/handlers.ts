@@ -15,6 +15,7 @@ import type { IpcContract } from '../../shared/ipc-contract'
 import {
   DEFAULT_SLOW_MODE_SPEED,
   DOWNLOADS_AT_ONCE,
+  type AppSettings,
   type InitialState,
   type ThemeSource
 } from '../../shared/types'
@@ -71,7 +72,11 @@ async function freeSpace(dir: string): Promise<number | null> {
   }
 }
 
-export function registerIpcHandlers(getWindow: () => BrowserWindow | null): DownloadManager {
+export function registerIpcHandlers(
+  getWindow: () => BrowserWindow | null,
+  /** Told what was saved after every settings change, for what main runs besides downloads. */
+  onSettings: (settings: AppSettings) => void = () => {}
+): DownloadManager {
   // The main process keeps the network list, for downloads and the window alike.
   const networks = new NetworkMonitor((list) => {
     manager.networksChanged()
@@ -105,7 +110,9 @@ export function registerIpcHandlers(getWindow: () => BrowserWindow | null): Down
     }
     await saveSettings(patch)
     // Read back rather than taken from the patch: what was saved is what passed the checks.
-    await manager.applySettings(await loadSettings())
+    const saved = await loadSettings()
+    await manager.applySettings(saved)
+    onSettings(saved)
   })
 
   // Answered via sendSync from the preload, which blocks the page until returnValue is set — so a
@@ -137,7 +144,8 @@ export function registerIpcHandlers(getWindow: () => BrowserWindow | null): Down
         slowModeSpeed: settings.slowModeSpeed ?? DEFAULT_SLOW_MODE_SPEED,
         speedUnit: settings.speedUnit ?? 'bytes',
         destinationDir: destinationExists ? destinationDir : undefined,
-        runningTranslated: app.runningUnderARM64Translation
+        runningTranslated: app.runningUnderARM64Translation,
+        watchClipboard: settings.watchClipboard === true
       } satisfies InitialState
     } catch (error) {
       console.error('[netsetgo] failed to read initial state', error)
@@ -150,7 +158,8 @@ export function registerIpcHandlers(getWindow: () => BrowserWindow | null): Down
         downloadsAtOnce: DOWNLOADS_AT_ONCE.default,
         slowMode: false,
         slowModeSpeed: DEFAULT_SLOW_MODE_SPEED,
-        speedUnit: 'bytes'
+        speedUnit: 'bytes',
+        watchClipboard: false
       } satisfies InitialState
     }
   })

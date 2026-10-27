@@ -49,6 +49,7 @@ interface AppStore {
   /** Persisted — the speed limits (see AppSettings). */
   speedLimit: number | undefined
   slowMode: boolean
+  watchClipboard: boolean
   slowModeSpeed: number
   /** Persisted — MB/s or Mbps, for every speed shown. */
   speedUnit: SpeedUnit
@@ -92,6 +93,7 @@ interface AppStore {
   /** Each one applies at once, to every download (see main/network/limits.ts). */
   setSpeedLimit: (bytesPerSec: number | undefined) => void
   setSlowMode: (on: boolean) => void
+  setWatchClipboard: (on: boolean) => void
   setSlowModeSpeed: (bytesPerSec: number) => void
   setSpeedUnit: (unit: SpeedUnit) => void
   setDraftUrl: (url: string) => void
@@ -131,6 +133,7 @@ export const useAppStore = create<AppStore>((set, get) => ({
   downloadsAtOnce: initial.downloadsAtOnce,
   speedLimit: initial.speedLimit,
   slowMode: initial.slowMode,
+  watchClipboard: initial.watchClipboard,
   slowModeSpeed: initial.slowModeSpeed,
   speedUnit: initial.speedUnit,
 
@@ -257,6 +260,11 @@ export const useAppStore = create<AppStore>((set, get) => ({
   setSlowMode: (slowMode) => {
     set({ slowMode })
     persist({ slowMode })
+  },
+
+  setWatchClipboard: (watchClipboard) => {
+    set({ watchClipboard })
+    persist({ watchClipboard })
   },
 
   setSlowModeSpeed: (slowModeSpeed) => {

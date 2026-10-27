@@ -360,6 +360,8 @@ export interface AppSettings {
   /** How speeds are shown everywhere; sizes stay in bytes either way. */
   speedUnit?: SpeedUnit
   browserExtensionUsed?: boolean
+  /** Offer download links copied anywhere. Off unless turned on: it reads the clipboard. */
+  watchClipboard?: boolean
 }
 
 /** bytes: MB/s. bits: Mbps, as internet plans and speed tests count them. */
@@ -395,6 +397,7 @@ export interface InitialState {
   /** The Intel build running on Apple silicon through Rosetta: many times slower to start and
    * respond than the native one, so the footer points to it. */
   runningTranslated?: boolean
+  watchClipboard: boolean
 }
 
 interface StartDownloadRequestBase {

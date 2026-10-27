@@ -5,6 +5,7 @@ import { formatBytes } from '../utils/format'
 import { useFormatSpeedLimit } from '../hooks/useFormatSpeed'
 import { useDownloadSchedule } from '../hooks/useDownloadSchedule'
 import { ScreenFooter } from './ScreenFooter'
+import { ClipboardToggle } from './ClipboardToggle'
 import { ThemeToggle } from './ThemeToggle'
 import { Switch } from './ui/switch'
 import { ToggleGroup, ToggleGroupItem } from './ui/toggle-group'
@@ -119,6 +120,7 @@ export function StatusBar(): React.JSX.Element {
           <TooltipContent>Limit downloads to {formatSpeedLimit(slowModeSpeed)}</TooltipContent>
         </Tooltip>
         <SpeedUnitToggle />
+        <ClipboardToggle />
         <ThemeToggle />
       </div>
     </ScreenFooter>
