@@ -178,7 +178,10 @@ function NewDownloadForm({ onDone }: { onDone: () => void }): React.JSX.Element 
   const multiChunkAllowed = ready !== null && ready.supportsRanges && ready.totalBytes !== null
   const isSingleStreamOnly = ready !== null && !multiChunkAllowed
 
-  const detectedIds = interfaces.map((iface) => iface.id)
+  // A torrent's peers connect to this computer's own networks: a phone or laptop added as a
+  // proxy can't carry them, so it isn't offered.
+  const offered = torrent ? interfaces.filter((iface) => iface.kind !== 'proxy') : interfaces
+  const detectedIds = offered.map((iface) => iface.id)
   // A network that has used up its data limit can't carry anything, so it can't be picked.
   const isReached = (id: string): boolean => {
     const dataLimit = networkPreferences[id]?.dataLimit
@@ -535,7 +538,7 @@ function NewDownloadForm({ onDone }: { onDone: () => void }): React.JSX.Element 
             aria-labelledby="new-download-networks"
             className="flex min-w-0 flex-1 flex-wrap gap-1.5"
           >
-            {interfaces.map((iface) => {
+            {offered.map((iface) => {
               const visual = networkVisual(iface.id, iface.kind, iface.displayName)
               const selected = selectedInterfaceIds.includes(iface.id)
               const reached = isReached(iface.id)

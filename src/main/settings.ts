@@ -6,6 +6,7 @@ import {
   type AppSettings,
   type NetworkPreference,
   type NetworkPreferences,
+  type ProxyNetwork,
   type ThemeSource
 } from '../shared/types'
 import { readJson, updateJson } from './jsonFile'
@@ -58,6 +59,26 @@ function sanitizeNetworkPreferences(parsed: unknown): NetworkPreferences {
 /** Trusts nothing past "this is valid JSON" — the file may be hand-edited or from an older
  * version, and a patch comes from the renderer. Every field is checked on its own, so one bad
  * value only loses that value. An `undefined` field in a patch clears it. */
+const MAX_PROXIES = 8
+
+/** A host name or IP address: letters, digits, dots, dashes and IPv6's colons, nothing else. */
+function validProxyNetwork(value: unknown): value is ProxyNetwork {
+  if (!isRecord(value)) return false
+  const { id, name, host, port } = value
+  return (
+    typeof id === 'string' &&
+    /^[\w-]{1,64}$/.test(id) &&
+    typeof name === 'string' &&
+    name.trim().length > 0 &&
+    name.length <= 60 &&
+    typeof host === 'string' &&
+    /^[a-z0-9.:-]{1,253}$/i.test(host) &&
+    Number.isInteger(port) &&
+    (port as number) >= 1 &&
+    (port as number) <= 65535
+  )
+}
+
 function sanitizeSettings(parsed: unknown): AppSettings {
   if (!isRecord(parsed)) return {}
 
@@ -91,6 +112,9 @@ function sanitizeSettings(parsed: unknown): AppSettings {
   }
   if (parsed.browserExtensionUsed === true) settings.browserExtensionUsed = true
   if (parsed.watchClipboard === true) settings.watchClipboard = true
+  if (Array.isArray(parsed.proxyNetworks)) {
+    settings.proxyNetworks = parsed.proxyNetworks.filter(validProxyNetwork).slice(0, MAX_PROXIES)
+  }
   return settings
 }
 

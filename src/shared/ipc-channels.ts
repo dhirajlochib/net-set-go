@@ -16,6 +16,7 @@ export const IpcChannels = {
   clearHistory: 'history:clear',
   networkUsage: 'network:usage',
   usageHistory: 'network:usage-history',
+  testProxy: 'network:test-proxy',
   resetNetworkUsage: 'network:reset-usage',
   freeSpace: 'disk:free-space',
   historyChanged: 'history:changed',

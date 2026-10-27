@@ -11,6 +11,7 @@ import { isIP, type Socket } from 'node:net'
 import type { Duplex } from 'node:stream'
 import type { IpFamily, NetworkInterfaceInfo } from '../../shared/types'
 import { connectRoute } from './deviceBinding'
+import { connectThroughProxy } from './proxy'
 
 export interface NetworkRoute {
   device: string
@@ -60,7 +61,11 @@ export function compatibleInterfaces(
   interfaces: NetworkInterfaceInfo[],
   remoteAddresses: RemoteAddress[]
 ): NetworkInterfaceInfo[] {
-  return interfaces.filter((iface) => routesFor(iface, remoteAddresses).length > 0)
+  // A proxy network reaches the server from the device: whatever address family the server has
+  // is the device's to reach.
+  return interfaces.filter(
+    (iface) => iface.proxy !== undefined || routesFor(iface, remoteAddresses).length > 0
+  )
 }
 
 export class NoCompatibleRouteError extends Error {
@@ -157,6 +162,7 @@ async function connectOnInterface(
   signal: AbortSignal,
   resolveHost?: ResolveHost
 ): Promise<Socket> {
+  if (iface.proxy) return connectThroughProxy(iface.proxy, host, port, secure, timeoutMs, signal)
   const deadline = Date.now() + timeoutMs
   const found = routesFor(iface, await resolveTargetWithin(host, timeoutMs, signal, resolveHost))
   if (found.length === 0) throw new NoCompatibleRouteError(host)

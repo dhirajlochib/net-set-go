@@ -1,4 +1,4 @@
-import { ChevronDown, ChevronRight } from 'lucide-react'
+import { ChevronDown, ChevronRight, Plus, X } from 'lucide-react'
 import { useState } from 'react'
 import { useNetworkUsage } from '../hooks/useNetworks'
 import { useNetworkVisuals } from '../hooks/useNetworkVisuals'
@@ -9,6 +9,7 @@ import { NetworkEditPopover } from './NetworkEditPopover'
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
 import { Button } from './ui/button'
 import { TruncatedText } from './TruncatedText'
+import { AddDeviceDialog } from './AddDeviceDialog'
 
 /** Every network the computer has, one row each: on the left what it is (its name, the system's
  * name for it, the limits set on it), on the right what it's doing (its speed). Which
@@ -27,6 +28,9 @@ export function NetworksMenu({
   const networkVisual = useNetworkVisuals()
   const [open, setOpen] = useState(false)
   const setUsageOpen = useAppStore((store) => store.setUsageOpen)
+  const proxies = useAppStore((store) => store.proxyNetworks)
+  const setProxies = useAppStore((store) => store.setProxyNetworks)
+  const [addDeviceOpen, setAddDeviceOpen] = useState(false)
   const usage = useNetworkUsage(open)
 
   // Every running download's speed over each network, added up.
@@ -101,8 +105,21 @@ export function NetworksMenu({
                 {/* The system's own name for the adapter, beside the user's. A long one (a Windows
                     driver name) is cut off, and only then is there a tooltip with all of it. */}
                 <span className="relative z-10 flex max-w-[110px] min-w-0 shrink-0 rounded-[4px] border-[0.5px] border-border bg-foreground/5 px-1.5 tabular-nums text-[10.5px] text-muted-foreground">
-                  <TruncatedText text={iface.displayName} />
+                  <TruncatedText text={iface.kind === 'proxy' ? iface.device : iface.displayName} />
                 </span>
+                {iface.kind === 'proxy' && (
+                  <button
+                    type="button"
+                    aria-label={`Remove ${visual.name}`}
+                    title="Remove"
+                    className="relative z-10 flex size-5 items-center justify-center rounded-full text-muted-foreground opacity-0 group-hover:opacity-100 hover:bg-foreground/10 hover:text-foreground focus-visible:opacity-100"
+                    onClick={() =>
+                      setProxies(proxies.filter((proxy) => `proxy:${proxy.id}` !== iface.id))
+                    }
+                  >
+                    <X className="size-3.5" />
+                  </button>
+                )}
               </div>
               {/* What it's doing: a used-up network is paused, which says why it carries nothing. */}
               <div
@@ -177,7 +194,19 @@ export function NetworksMenu({
             Data usage
           </button>
         </div>
+        <button
+          type="button"
+          className="flex items-center gap-1.5 border-t-[0.5px] border-border px-4 py-3 text-left text-[13px] font-medium text-primary hover:underline"
+          onClick={() => {
+            setOpen(false)
+            setAddDeviceOpen(true)
+          }}
+        >
+          <Plus className="size-3.5" />
+          Add a phone or laptop
+        </button>
       </PopoverContent>
+      <AddDeviceDialog open={addDeviceOpen} onOpenChange={setAddDeviceOpen} />
     </Popover>
   )
 }

@@ -25,6 +25,7 @@ import { listHistory } from '../download/history'
 import { probeUrl } from '../download/probe'
 import { onMagnetCheckStatus } from '../download/torrent/metadata'
 import { deviceBindingSupported } from '../network/deviceBinding'
+import { testProxy } from '../network/proxy'
 import { pendingLink, pendingLinks, releaseLink } from '../openLinks'
 import { NetworkMonitor } from '../network/interfaces'
 import { loadSettings, saveSettings } from '../settings'
@@ -83,6 +84,7 @@ export function registerIpcHandlers(
     const window = getWindow()
     if (window && !window.isDestroyed()) window.webContents.send(IpcChannels.networksChanged, list)
   })
+  void loadSettings().then((settings) => networks.setProxies(settings.proxyNetworks ?? []))
   const manager = new DownloadManager(getWindow, networks)
   // Waking from sleep, the networks may have changed without a poll in between to see it.
   powerMonitor.on('resume', () => {
@@ -111,6 +113,7 @@ export function registerIpcHandlers(
     await saveSettings(patch)
     // Read back rather than taken from the patch: what was saved is what passed the checks.
     const saved = await loadSettings()
+    networks.setProxies(saved.proxyNetworks ?? [])
     await manager.applySettings(saved)
     onSettings(saved)
   })
@@ -145,7 +148,8 @@ export function registerIpcHandlers(
         speedUnit: settings.speedUnit ?? 'bytes',
         destinationDir: destinationExists ? destinationDir : undefined,
         runningTranslated: app.runningUnderARM64Translation,
-        watchClipboard: settings.watchClipboard === true
+        watchClipboard: settings.watchClipboard === true,
+        proxyNetworks: settings.proxyNetworks ?? []
       } satisfies InitialState
     } catch (error) {
       console.error('[netsetgo] failed to read initial state', error)
@@ -159,8 +163,18 @@ export function registerIpcHandlers(
         slowMode: false,
         slowModeSpeed: DEFAULT_SLOW_MODE_SPEED,
         speedUnit: 'bytes',
-        watchClipboard: false
+        watchClipboard: false,
+        proxyNetworks: []
       } satisfies InitialState
+    }
+  })
+
+  handle('testProxy', async (_event, host, port) => {
+    try {
+      await testProxy({ host, port })
+      return null
+    } catch (error) {
+      return error instanceof Error ? error.message : String(error)
     }
   })
 

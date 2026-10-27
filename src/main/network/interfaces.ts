@@ -1,7 +1,13 @@
 import { execFile } from 'node:child_process'
 import { networkInterfaces } from 'node:os'
 import { promisify } from 'node:util'
-import type { NetworkAddress, NetworkInterfaceInfo, NetworkInterfaceKind } from '../../shared/types'
+import type {
+  NetworkAddress,
+  NetworkInterfaceInfo,
+  NetworkInterfaceKind,
+  ProxyNetwork
+} from '../../shared/types'
+import { proxyInterface } from './proxy'
 import { testInterfaces } from '../testKnobs'
 
 const execFileAsync = promisify(execFile)
@@ -191,10 +197,20 @@ const POLL_MS = 1000
 export class NetworkMonitor {
   private list: NetworkInterfaceInfo[] | null = null
   private polling: Promise<NetworkInterfaceInfo[]> = Promise.resolve([])
+  /** Phones and laptops added as networks, after the computer's own. */
+  private proxies: NetworkInterfaceInfo[] = []
 
   constructor(private readonly onChange: (networks: NetworkInterfaceInfo[]) => void) {
     void this.refresh()
     setInterval(() => void this.refresh(), POLL_MS).unref()
+  }
+
+  /** Takes the phones and laptops added as networks; they show up in the list at once. */
+  setProxies(proxies: ProxyNetwork[]): void {
+    const next = proxies.map(proxyInterface)
+    if (JSON.stringify(next) === JSON.stringify(this.proxies)) return
+    this.proxies = next
+    void this.refresh()
   }
 
   /** Null until the first look has finished. */
@@ -212,7 +228,10 @@ export class NetworkMonitor {
     this.polling = this.polling
       .catch(() => [])
       .then(async () => {
-        const next = await listActiveInterfaces().catch(() => this.list ?? [])
+        const found = await listActiveInterfaces().catch(() =>
+          (this.list ?? []).filter((iface) => iface.kind !== 'proxy')
+        )
+        const next = [...found, ...this.proxies]
         if (JSON.stringify(next) !== JSON.stringify(this.list)) {
           this.list = next
           this.onChange(next)

@@ -45,6 +45,7 @@ const netsetgoApi = {
   clearHistory: () => invoke('clearHistory'),
   networkUsage: () => invoke('networkUsage'),
   usageHistory: () => invoke('usageHistory'),
+  testProxy: (host: string, port: number) => invoke('testProxy', host, port),
   resetNetworkUsage: (id) => invoke('resetNetworkUsage', id),
   freeSpace: (dir: string) => invoke('freeSpace', dir),
   torrentFiles: (downloadId: string) => invoke('torrentFiles', downloadId),

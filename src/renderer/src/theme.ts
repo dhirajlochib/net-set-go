@@ -29,7 +29,8 @@ export const KIND_PALETTE: Record<NetworkInterfaceKind, KindPalette> = {
   usb: makeKindPalette('usb', 'USB'),
   ethernet: makeKindPalette('ethernet', 'ETH'),
   bridge: makeKindPalette('neutral', 'NET'),
-  other: makeKindPalette('neutral', 'NET')
+  other: makeKindPalette('neutral', 'NET'),
+  proxy: makeKindPalette('neutral', 'VIA')
 }
 
 // The brand amber doubles as the USB network color, exactly as in the design.
@@ -110,7 +111,8 @@ const KIND_SWATCH: Record<NetworkInterfaceKind, NetworkColorId | undefined> = {
   usb: 'amber',
   ethernet: 'steel',
   bridge: undefined,
-  other: undefined
+  other: undefined,
+  proxy: undefined
 }
 
 /** Gives every network exactly one color, distinct from the others while swatches last: a

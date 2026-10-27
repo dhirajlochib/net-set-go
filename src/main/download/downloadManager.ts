@@ -35,6 +35,7 @@ import {
   type TorrentPieceState
 } from '../../shared/types'
 import { Limits } from '../network/limits'
+import { PROXY_ID_PREFIX } from '../network/proxy'
 import { loadSettings } from '../settings'
 import { addToHistory, findInHistory, removeFromHistory } from './history'
 import { testKnobs } from '../testKnobs'
@@ -927,10 +928,19 @@ export class DownloadManager {
       requestPayload = { ...requestPayload, browser }
     }
 
-    const available = await this.networks.refresh()
+    // A torrent's peers connect to the computer's own networks: a phone or laptop added as a
+    // proxy can't carry them.
+    const available = (await this.networks.refresh()).filter(
+      (iface) => requestPayload.kind !== 'torrent' || iface.kind !== 'proxy'
+    )
     const selected = available.filter((iface) => requestPayload.interfaceIds.includes(iface.id))
     if (selected.length === 0) {
-      throw new Error('Select at least one network')
+      throw new Error(
+        requestPayload.kind === 'torrent' &&
+          requestPayload.interfaceIds.some((id) => id.startsWith(PROXY_ID_PREFIX))
+          ? 'Torrents can’t use a phone or laptop added as a network. Select one of this computer’s networks.'
+          : 'Select at least one network'
+      )
     }
     await ensureDirectory(requestPayload.destinationDir)
     const id = randomUUID()
@@ -1836,6 +1846,7 @@ export class DownloadManager {
         )
       }
       for (const iface of present) {
+        if (state.kind === 'torrent' && iface.kind === 'proxy') continue
         if (!state.networks.some((network) => network.id === iface.id)) {
           if (state.kind === 'http') state.networks.push(newHttpNetwork(iface, false))
           else state.networks.push(newTorrentNetwork(iface, false))

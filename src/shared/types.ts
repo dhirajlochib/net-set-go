@@ -1,4 +1,5 @@
-export type NetworkInterfaceKind = 'wifi' | 'usb' | 'ethernet' | 'bridge' | 'other'
+/** proxy: a phone or laptop sharing its internet as an HTTP proxy (see main/network/proxy.ts). */
+export type NetworkInterfaceKind = 'wifi' | 'usb' | 'ethernet' | 'bridge' | 'other' | 'proxy'
 export type IpFamily = 4 | 6
 
 export interface NetworkAddress {
@@ -19,6 +20,16 @@ export interface NetworkInterfaceInfo {
   addresses: NetworkAddress[]
   kind: NetworkInterfaceKind
   mac?: string
+  /** Set for a proxy network: where its connections are tunnelled through. */
+  proxy?: { host: string; port: number }
+}
+
+/** A phone or laptop the user added as a network: an HTTP proxy at host:port. */
+export interface ProxyNetwork {
+  id: string
+  name: string
+  host: string
+  port: number
 }
 
 interface ProbeResultBase {
@@ -362,6 +373,8 @@ export interface AppSettings {
   browserExtensionUsed?: boolean
   /** Offer download links copied anywhere. Off unless turned on: it reads the clipboard. */
   watchClipboard?: boolean
+  /** Phones and laptops added as networks. */
+  proxyNetworks?: ProxyNetwork[]
 }
 
 /** bytes: MB/s. bits: Mbps, as internet plans and speed tests count them. */
@@ -405,6 +418,7 @@ export interface InitialState {
    * respond than the native one, so the footer points to it. */
   runningTranslated?: boolean
   watchClipboard: boolean
+  proxyNetworks: ProxyNetwork[]
 }
 
 interface StartDownloadRequestBase {

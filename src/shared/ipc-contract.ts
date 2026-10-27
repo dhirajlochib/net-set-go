@@ -42,6 +42,8 @@ export interface IpcContract {
   /** Bytes each network has received in its selected calendar period, by id (see NetworkPreference.dataLimit). */
   networkUsage: { args: []; result: Record<string, number> }
   usageHistory: { args: []; result: DailyUsage[] }
+  /** null when a tunnel through the device opened; otherwise why it didn't. */
+  testProxy: { args: [host: string, port: number]; result: string | null }
   resetNetworkUsage: { args: [id: string]; result: void }
   /** Bytes free on the drive holding `dir`; null when it can't be told. */
   freeSpace: { args: [dir: string]; result: number | null }

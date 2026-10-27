@@ -10,6 +10,7 @@ import type {
   NetworkPreference,
   NetworkPreferences,
   PendingLink,
+  ProxyNetwork,
   SpeedUnit,
   ThemeSource
 } from '@shared/types'
@@ -52,6 +53,7 @@ interface AppStore {
   slowMode: boolean
   watchClipboard: boolean
   usageOpen: boolean
+  proxyNetworks: ProxyNetwork[]
   slowModeSpeed: number
   /** Persisted — MB/s or Mbps, for every speed shown. */
   speedUnit: SpeedUnit
@@ -97,6 +99,7 @@ interface AppStore {
   setSlowMode: (on: boolean) => void
   setWatchClipboard: (on: boolean) => void
   setUsageOpen: (open: boolean) => void
+  setProxyNetworks: (proxies: ProxyNetwork[]) => void
   /** From the menu bar item's menu (see main/menuBar.ts). */
   receiveMenuAction: (action: MenuAction) => void
   setSlowModeSpeed: (bytesPerSec: number) => void
@@ -140,6 +143,7 @@ export const useAppStore = create<AppStore>((set, get) => ({
   slowMode: initial.slowMode,
   watchClipboard: initial.watchClipboard,
   usageOpen: false,
+  proxyNetworks: initial.proxyNetworks,
   slowModeSpeed: initial.slowModeSpeed,
   speedUnit: initial.speedUnit,
 
@@ -274,6 +278,11 @@ export const useAppStore = create<AppStore>((set, get) => ({
   },
 
   setUsageOpen: (usageOpen) => set({ usageOpen }),
+
+  setProxyNetworks: (proxyNetworks) => {
+    set({ proxyNetworks })
+    persist({ proxyNetworks })
+  },
 
   receiveMenuAction: (action) => {
     if (action.type === 'new-download') get().openNewDownload()
