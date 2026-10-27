@@ -12,6 +12,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip'
 import { UpdateIndicator } from './UpdateIndicator'
 
 const FREE_SPACE_POLL_MS = 30_000
+const { runningTranslated } = window.netsetgo.initialState
 
 /** MB/s or Mbps for every speed in the app; sits with the theme toggle as a view preference. */
 function SpeedUnitToggle(): React.JSX.Element {
@@ -91,6 +92,17 @@ export function StatusBar(): React.JSX.Element {
   return (
     <ScreenFooter className="gap-4 tabular-nums text-[11.5px] text-muted-foreground">
       <span className="min-w-0 flex-1 truncate tabular-nums">{status.join(' · ')}</span>
+      {runningTranslated && (
+        <a
+          href="https://netsetgo.dhirajlochib.com/#downloads"
+          target="_blank"
+          rel="noreferrer"
+          title="This is the Intel version, running slowly through Rosetta"
+          className="shrink-0 font-medium text-[var(--color-danger)] hover:underline"
+        >
+          Get the faster Apple silicon version
+        </a>
+      )}
       {message && <span className="truncate">{message}</span>}
       {/* Controls, most-flipped first: the edge holds the set-once view preferences. */}
       <div className="flex shrink-0 items-center gap-3">

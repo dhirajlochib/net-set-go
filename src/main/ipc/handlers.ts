@@ -1,5 +1,6 @@
 import { stat, statfs } from 'node:fs/promises'
 import {
+  app,
   clipboard,
   dialog,
   ipcMain,
@@ -135,7 +136,8 @@ export function registerIpcHandlers(getWindow: () => BrowserWindow | null): Down
         slowMode: settings.slowMode ?? false,
         slowModeSpeed: settings.slowModeSpeed ?? DEFAULT_SLOW_MODE_SPEED,
         speedUnit: settings.speedUnit ?? 'bytes',
-        destinationDir: destinationExists ? destinationDir : undefined
+        destinationDir: destinationExists ? destinationDir : undefined,
+        runningTranslated: app.runningUnderARM64Translation
       } satisfies InitialState
     } catch (error) {
       console.error('[netsetgo] failed to read initial state', error)

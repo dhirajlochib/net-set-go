@@ -386,6 +386,9 @@ export interface InitialState {
   speedUnit: SpeedUnit
   /** The last folder picked, if it still exists — otherwise the renderer uses downloadsDir. */
   destinationDir?: string
+  /** The Intel build running on Apple silicon through Rosetta: many times slower to start and
+   * respond than the native one, so the footer points to it. */
+  runningTranslated?: boolean
 }
 
 interface StartDownloadRequestBase {
