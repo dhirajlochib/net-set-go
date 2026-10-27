@@ -39,35 +39,37 @@ closer — while staying at home on Windows and Linux.
 
 ## Phase 3 — Features
 
+✅ shipped in 1.1: clipboard links, menu bar item, data usage, phones and laptops as networks, videos through yt-dlp.
+
 ### Next up
 
-| Feature                  | Why                                                                           | Size |
-| ------------------------ | ----------------------------------------------------------------------------- | ---- |
-| Clipboard link detection | Copy a link anywhere → NetSetGo offers to download it (opt-in).               | S    |
-| Drag & drop              | Drop links, `.torrent` files or text onto the window or Dock icon.            | S    |
-| Completion notifications | Native notification with _Open_ / _Show in Folder_ actions.                   | S    |
-| Menu-bar mini window     | Live total speed and active downloads from the tray, without opening the app. | M    |
-| Command palette (⌘K)     | Every action searchable; keyboard-first workflow.                             | M    |
-| Search & filters         | Filter history by name, type, date, status, site.                             | S    |
-| Auto-sort into folders   | Video / Music / Archives / Documents / Apps rules, editable.                  | S    |
-| Checksum verification    | Paste a SHA-256/MD5 → verified automatically when the download finishes.      | S    |
-| Batch import             | Paste many links or load a `.txt`; all queued at once.                        | S    |
-| Quick Look               | Space bar previews a completed file (`BrowserWindow.previewFile` on macOS).   | S    |
+| Feature                     | Why                                                                           | Size |
+| --------------------------- | ----------------------------------------------------------------------------- | ---- |
+| ✅ Clipboard link detection | Copy a link anywhere → NetSetGo offers to download it (opt-in).               | S    |
+| Drag & drop                 | Drop links, `.torrent` files or text onto the window or Dock icon.            | S    |
+| Completion notifications    | Native notification with _Open_ / _Show in Folder_ actions.                   | S    |
+| ✅ Menu-bar mini window     | Live total speed and active downloads from the tray, without opening the app. | M    |
+| Command palette (⌘K)        | Every action searchable; keyboard-first workflow.                             | M    |
+| Search & filters            | Filter history by name, type, date, status, site.                             | S    |
+| Auto-sort into folders      | Video / Music / Archives / Documents / Apps rules, editable.                  | S    |
+| Checksum verification       | Paste a SHA-256/MD5 → verified automatically when the download finishes.      | S    |
+| Batch import                | Paste many links or load a `.txt`; all queued at once.                        | S    |
+| Quick Look                  | Space bar previews a completed file (`BrowserWindow.previewFile` on macOS).   | S    |
 
 ### Power features
 
-| Feature                       | Why                                                                                          | Size |
-| ----------------------------- | -------------------------------------------------------------------------------------------- | ---- |
-| Multi-mirror downloads        | Same file from several URLs at once — mirrors × networks.                                    | L    |
-| Post-download actions         | Auto-extract archives, open, move, run a script, sleep or shut down when the queue finishes. | M    |
-| Usage dashboard               | Data used per network per day/week/month; charts against the allowances already supported.   | M    |
-| CLI + local API               | `netsetgo add <url>`, `netsetgo ls`, plus a localhost API for scripts and automations.       | M    |
-| Shortcuts / Raycast / Alfred  | Built on the `netsetgo://` scheme and the local API.                                         | M    |
-| Site rules                    | Per-site headers, cookies, stream limits and save folders.                                   | M    |
-| Sequential torrent mode       | Download in order so video can be previewed while it downloads.                              | M    |
-| Torrent RSS feeds             | Subscribe and auto-download matching items.                                                  | M    |
-| Media-site support (optional) | Optional yt-dlp integration for pages, not just direct links.                                | L    |
-| Safari extension              | Browser integration for Safari users.                                                        | M    |
+| Feature                          | Why                                                                                          | Size |
+| -------------------------------- | -------------------------------------------------------------------------------------------- | ---- |
+| Multi-mirror downloads           | Same file from several URLs at once — mirrors × networks.                                    | L    |
+| Post-download actions            | Auto-extract archives, open, move, run a script, sleep or shut down when the queue finishes. | M    |
+| ✅ Usage dashboard               | Data used per network per day/week/month; charts against the allowances already supported.   | M    |
+| CLI + local API                  | `netsetgo add <url>`, `netsetgo ls`, plus a localhost API for scripts and automations.       | M    |
+| Shortcuts / Raycast / Alfred     | Built on the `netsetgo://` scheme and the local API.                                         | M    |
+| Site rules                       | Per-site headers, cookies, stream limits and save folders.                                   | M    |
+| Sequential torrent mode          | Download in order so video can be previewed while it downloads.                              | M    |
+| Torrent RSS feeds                | Subscribe and auto-download matching items.                                                  | M    |
+| ✅ Media-site support (optional) | Optional yt-dlp integration for pages, not just direct links.                                | L    |
+| Safari extension                 | Browser integration for Safari users.                                                        | M    |
 
 ### Polish & reach
 

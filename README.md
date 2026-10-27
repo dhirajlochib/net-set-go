@@ -96,6 +96,28 @@ NetSetGo uses them **together**.
 
 </td>
 </tr>
+<tr>
+<td valign="top">
+
+#### 📱 More lines than you have
+
+- Add a phone or laptop as one more network
+- It shares its own internet through an HTTP proxy app
+- A second Wi-Fi or another line, no new hardware
+- Test the connection before you add it
+
+</td>
+<td valign="top">
+
+#### ✨ Out of the way
+
+- Live speed and every download in the menu bar
+- Copy a download link anywhere and NetSetGo offers it
+- Download the video on a web page through yt-dlp
+- Data usage per network, day by day
+
+</td>
+</tr>
 </table>
 
 <br>

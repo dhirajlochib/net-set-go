@@ -10,6 +10,41 @@
 
   root.NetSetGoChangelog = [
     {
+      version: 'v1.1.0',
+      items: [
+        {
+          kind: 'new',
+          title: 'A phone or laptop as one more network',
+          text: 'Networks → Add a phone or laptop. Run an HTTP proxy app on the device, enter the address it shows, and its internet joins your downloads — a second Wi-Fi your phone is on, or another laptop’s line, without new hardware. Test connection checks it first.'
+        },
+        {
+          kind: 'new',
+          title: 'In the menu bar',
+          text: 'NetSetGo shows its total speed in the menu bar while it downloads. Its menu lists every download with Pause, Resume and Show in Finder, and has New download, Data usage and Pause all.'
+        },
+        {
+          kind: 'new',
+          title: 'Links you copy',
+          text: 'Turn on the clipboard button in the footer, and a download link or magnet link you copy in any app opens in New download, with a notification. Nothing starts until you press Download.'
+        },
+        {
+          kind: 'new',
+          title: 'Videos on web pages',
+          text: 'Paste a video page and, with yt-dlp installed, Download its video finds the file and downloads it over your networks like any other.'
+        },
+        {
+          kind: 'new',
+          title: 'Data usage',
+          text: 'Networks → Data usage charts what each network downloaded every day, over the last 7, 30 or 90 days.'
+        },
+        {
+          kind: 'improved',
+          title: 'Clearer colors in dark mode',
+          text: 'Wi-Fi, USB and Ethernet colors are easier to tell apart in dark mode, colorblind-friendly included.'
+        }
+      ]
+    },
+    {
       version: 'v1.0.1',
       items: [
         {
