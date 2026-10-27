@@ -58,8 +58,9 @@ export interface MediaInfo {
 
 /** Characters no file system takes in a name. */
 function safeName(name: string): string {
-  const cleaned = name
-    .replace(/[<>:"/\\|?*\u0000-\u001f]/g, ' ')
+  const cleaned = [...name]
+    .map((char) => (char.charCodeAt(0) < 0x20 || '<>:"/\\|?*'.includes(char) ? ' ' : char))
+    .join('')
     .replace(/\s+/g, ' ')
     .trim()
   return cleaned.slice(0, 180) || 'video'
