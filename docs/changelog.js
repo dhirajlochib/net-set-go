@@ -10,6 +10,26 @@
 
   root.NetSetGoChangelog = [
     {
+      version: 'v1.0.1',
+      items: [
+        {
+          kind: 'fixed',
+          title: 'Opens on Apple silicon Macs',
+          text: 'The Apple silicon download no longer shows as damaged. If you installed the Intel version on an M-series Mac to get around it, switch to this one: it starts in under a second instead of 10–30 and responds instantly.'
+        },
+        {
+          kind: 'new',
+          title: 'Fresh look',
+          text: 'Mac-style controls, the system font and a single toolbar that is also the title bar, in light and dark.'
+        },
+        {
+          kind: 'improved',
+          title: 'Points you to the faster version',
+          text: 'Running the Intel version on an Apple silicon Mac now shows a link to the native one.'
+        }
+      ]
+    },
+    {
       version: 'v1.0.0',
       items: [
         {
